@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BEKK Graph Search</title>
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<script>
+    var last = 0;
+    $(function () {
+        $("#form").submit(function () {
+            $("#log").show();
+            $.ajax({
+                type: "GET",
+                url: '/rest/database/sok',
+                data: 'term=' + $("#searchfield").val(),
+                success: function (msg) {
+                    var html = "<ul>";
+                    $.each(msg.navn, function (index, value) {
+                        html += "<li>" + value + "</li>"
+                    });
+                    html += "</ul>"
+                    $("#log").html(html);
+                    $("#cypher").html(msg.cypher);
+                }
+            });
+
+            return false;
+        });
+        $("#searchfield").keyup( function() {
+            var query = $("#searchfield").val();
+            setFontSize(query);
+            if (endsWith(query, "kan ") || endsWith(query, "med ") || endsWith(query, "hos ") || endsWith(query, "bruker ") || endsWith(query, "av ")) {
+
+                $.ajax({
+                    type: "GET",
+                    url: '/rest/database/sok',
+                    data: 'term=' + $("#searchfield").val(),
+                    success: function (msg) {
+                        $("#log").hide();
+                        $("#options").empty();
+                        $("#options").show();
+                        $.each(msg.navn, function (index, value) {
+                            var text = query + '"' + value + '"';
+                            $("#options").append("<li data-text='" + text + "'>" + text + "</li>");
+                            $("#options li").click(function () {
+                                var query = $(this).data("text");
+                                $("#searchfield").val(query);
+                                setFontSize(query);
+                                $("#form").submit();
+                                $("#log").show();
+                                $("#options").hide();
+                            });
+                        });
+                    }
+                });
+            } else if (query == "") {
+                $("#log").empty();
+                $("#log").hide();
+            } else {
+                $("#options").empty();
+                $("#options").hide();
+            }
+
+        });
+        $("#options li").click(function () {
+            var query = $(this).data("text");
+            $("#searchfield").val(query);
+            setFontSize(query);
+            $("#form").submit();
+            $("#log").show();
+            $("#options").hide();
+        });
+
+    });
+    function endsWith(str, suffix) {
+        return str.indexOf(suffix, str.length - suffix.length) !== -1;
+    }
+
+    function setFontSize(query) {
+        if (query.length > 70) {
+            $("#searchfield").css("font-size", "20px");
+        } else if (query.length > 50) {
+            $("#searchfield").css("font-size", "30px");
+        } else if (query.length > 40) {
+            $("#searchfield").css("font-size", "40px");
+        } else {
+            $("#searchfield").css("font-size", "50px");
+        }
+    }
+</script>
+<h2>BEKK Graph Search</h2>
+
+<form id="form">
+    <input type="text" id="searchfield" autofocus="autofocus"/>
+    <ul id="options">
+    </ul>
+    <div id="log" style="display: none">
+
+    </div>
+    <div id="cypher">
+
+    </div>
+</form>
+</body>
+</html>
