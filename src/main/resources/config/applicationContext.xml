@@ -10,7 +10,7 @@
 
     <context:annotation-config/>
     <context:spring-configured/>
-    <neo4j:config storeDirectory="data.new2/graph.db"/>
+    <neo4j:config storeDirectory="data/graph.db"/>
     <neo4j:repositories base-package="no.bekk.cv.graphsearch.integration"/>
 
     <context:component-scan base-package="no.bekk.cv.graphsearch">

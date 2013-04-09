@@ -12,6 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public interface PersonRepository extends GraphRepository<Person> {
 
-    @Query("start person=node:personer(navn = {navn}) match person -[:KAN]-> fag return fag")
+    @Query("start person=node:person(navn = {navn}) match person -[:KAN]-> fag return fag")
     public Iterable<Fag> hentFagSomPersonenKan(@Param("navn") String navn);
 }
