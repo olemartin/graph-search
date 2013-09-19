@@ -83,6 +83,7 @@ $(function () {
                 log.html(html);
                 log.show();
                 cypher.html(msg.cypher);
+                cypher.show();
                 selected = -1;
             }
         });
@@ -125,9 +126,10 @@ $(function () {
                 }
             });
         } else if (query == "") {
-            clearAndHide($("#log"));
+            clearAndHide(log);
+            clearAndHide(cypher);
         } else {
-            clearAndHide($("#options"));
+            clearAndHide(options);
         }
     });
 
