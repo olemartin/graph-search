@@ -5,9 +5,9 @@ import org.junit.Test;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
-public class QueryParserTest {
+public class TextualQueryParserTest {
 
-    private final QueryParser parser = new TextualQueryParser();
+    private final TextualQueryParser parser = new TextualQueryParser();
 
     @Test
     public void testFinnAlleSomKanJava() {

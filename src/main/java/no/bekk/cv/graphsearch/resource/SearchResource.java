@@ -7,7 +7,7 @@ import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Person;
 import no.bekk.cv.graphsearch.integration.PersonRepository;
 import no.bekk.cv.graphsearch.integration.Repo;
-import no.bekk.cv.graphsearch.query.TextualQueryParser;
+import no.bekk.cv.graphsearch.query.QueryParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.neo4j.conversion.EndResult;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 @Path("/")
@@ -30,6 +31,9 @@ public class SearchResource {
 
     @Autowired
     private PersonRepository personRepository;
+
+    @Autowired
+    private QueryParser parser;
 
     @GET
     @Path("persons/{person}/fag")
@@ -45,19 +49,22 @@ public class SearchResource {
     @GET
     @Path("database/sok")
     public Result query(@QueryParam("term") String query) {
+        try {
+            String cypher = parser.parseQuery(query);
+            System.out.println(query);
+            System.out.println(cypher);
+            EndResult<Person> personer =
+                    personRepository.query(cypher, new HashMap<String, Object>());
 
-        String cypher = new TextualQueryParser().parseQuery(query);
-        System.out.println(query);
-        System.out.println(cypher);
-        EndResult<Person> personer =
-                personRepository.query(cypher, new HashMap<String, Object>());
-
-        Iterable<String> navn = Iterables.transform(personer, new Function<Person, String>() {
-            public String apply(Person person) {
-                return person.getNavn();
-            }
-        });
-        return new Result(navn, cypher);
+            Iterable<String> navn = Iterables.transform(personer, new Function<Person, String>() {
+                public String apply(Person person) {
+                    return person.getNavn();
+                }
+            });
+            return new Result(navn, cypher);
+        } catch (IllegalArgumentException e) {
+            return new Result(new ArrayList<String>(), "");
+        }
     }
 
     @GET

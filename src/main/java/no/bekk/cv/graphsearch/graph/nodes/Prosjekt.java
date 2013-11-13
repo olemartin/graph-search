@@ -45,4 +45,8 @@ public class Prosjekt {
         Collections.addAll(this.teknologier, teknologier);
         return this;
     }
+
+    public String getNavn() {
+        return navn;
+    }
 }
