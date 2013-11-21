@@ -4,7 +4,6 @@ import no.bekk.cv.graphsearch.integration.PersonRepository;
 import no.bekk.cv.graphsearch.query.QueryParser;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.TracingParseRunner;
-import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,17 +26,15 @@ public class ParboiledQueryParser implements QueryParser {
         TracingParseRunner runner = new TracingParseRunner(parser.Expression());
         ParsingResult<Query> result = runner.run(query);
         if (!result.hasErrors()) {
-            System.out.println(ParseTreeUtils.printNodeTree(result));
-            StringBuilder start = new StringBuilder();
-            StringBuilder match = new StringBuilder();
             List<Query> targets = getQueries(result);
             String searchFor = result.valueStack.pop().getName();
-
             Query realSearchFor = null;
             if (!result.valueStack.isEmpty()) {
                 realSearchFor = result.valueStack.pop();
                 targets.add(realSearchFor);
             }
+            StringBuilder start = new StringBuilder();
+            StringBuilder match = new StringBuilder();
             createQuery(start, match, targets, searchFor, realSearchFor != null ? realSearchFor.getName() : null);
             String retur = "return distinct " + (realSearchFor != null ? realSearchFor.getName() : searchFor);
             return start.append(match).append(retur).toString();
