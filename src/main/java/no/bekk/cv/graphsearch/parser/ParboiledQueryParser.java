@@ -32,19 +32,25 @@ public class ParboiledQueryParser implements QueryParser {
             StringBuilder match = new StringBuilder();
             List<Query> targets = getQueries(result);
             String searchFor = result.valueStack.pop().getName();
-            createQuery(start, match, targets, searchFor);
-            String retur = "return distinct entitet";
+
+            Query realSearchFor = null;
+            if (!result.valueStack.isEmpty()) {
+                realSearchFor = result.valueStack.pop();
+                targets.add(realSearchFor);
+            }
+            createQuery(start, match, targets, searchFor, realSearchFor != null ? realSearchFor.getName() : null);
+            String retur = "return distinct " + (realSearchFor != null ? realSearchFor.getName() : searchFor);
             return start.append(match).append(retur).toString();
         } else {
             throw new IllegalArgumentException("Ugyldig spørring");
         }
     }
 
-    private void createQuery(StringBuilder start, StringBuilder match, List<Query> targets, String searchFor) {
+    private void createQuery(StringBuilder start, StringBuilder match, List<Query> targets, String searchFor, String realSearchFor) {
         for (int i = 0; i < targets.size(); i++) {
             Query target = targets.get(i);
             if (start.length() == 0) {
-                target.initQuery(start, match, searchFor);
+                target.initQuery(start, match, searchFor, realSearchFor);
             } else {
                 target.appendQuery(start, match, searchFor, i);
             }

@@ -6,15 +6,33 @@ public class Technology extends Query {
     }
 
     @Override
-    public void initQuery(StringBuilder start, StringBuilder match, String searchFor) {
-        start.append("start fag=node:fag(navn = \"" + getName() + "\") \n");
-        match.append("match entitet " + getRelationType(searchFor).print() + " fag \n");
+    public void initQuery(StringBuilder start, StringBuilder match, String searchFor, String rootSearchFor) {
+        start.append("start fag=node:fag(navn = \"").append(getName()).append("\") \n");
+        if (rootSearchFor != null) {
+            createMatch(match, searchFor, rootSearchFor);
+        } else {
+            createMatch(match, searchFor, searchFor);
+        }
+    }
+
+    private void createMatch(StringBuilder match, String relationType, String searchFor) {
+        match.append("match ")
+                .append(searchFor)
+                .append(" ")
+                .append(getRelationType(relationType).print())
+                .append(" fag \n");
     }
 
     @Override
     public void appendQuery(StringBuilder start, StringBuilder match, String searchFor, int count) {
-        start.append(", fag" + count + "=node:fag(navn = \"" + getName() + "\") \n");
-        match.append(", entitet " + getRelationType(searchFor).print() + " fag" + count + " \n");
+        start.append(", fag").append(count).append("=node:fag(navn = \"").append(getName()).append("\") \n");
+        match.append(", ")
+                .append(searchFor)
+                .append(" ")
+                .append(getRelationType(searchFor).print())
+                .append(" fag")
+                .append(count)
+                .append(" \n");
     }
 
     @Override

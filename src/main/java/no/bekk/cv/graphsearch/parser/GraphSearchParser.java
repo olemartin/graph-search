@@ -34,95 +34,87 @@ public class GraphSearchParser extends BaseParser<Query> {
                         Projects(),
                         Technologies()
                 ),
-                Whitepace(),
                 OneOrMore(
                         FirstOf(
+                                And(),
                                 Sequence(
-                                        Optional(That()),
-                                        Optional(Whitepace()),
                                         Know(),
-                                        Whitepace(),
                                         Targets()
                                 ),
                                 Sequence(
-                                        Optional(That()),
-                                        Optional(Whitepace()),
                                         WorkedAt(),
-                                        Whitepace(),
                                         Customers()
                                 ),
                                 Sequence(
-                                        Whitepace(),
-                                        And(),
-                                        Whitepace()
-                                ),
-                                Sequence(
-                                        Optional(That()),
-                                        Optional(Whitepace()),
                                         Know(),
-                                        Whitepace(),
                                         Customers()
+                                ),
+                                Sequence(
+                                        Know(),
+                                        Technologies()
                                 )
                         )
                 )
         );
     }
 
-
     @SuppressNode
     Rule That() {
-        return Optional("som");
+        return Optional("som ");
     }
 
     Rule People() {
         return FirstOf(
-                PeopleSequence("alle konsulenter"),
-                PeopleSequence("alle"),
-                PeopleSequence("konsulenter"));
-    }
-
-    Rule PeopleSequence(String name) {
-        return Sequence(push(Query.CONSULTANTS), name);
+                PeopleSequence("alle konsulenter "),
+                PeopleSequence("alle "),
+                PeopleSequence("konsulenter "));
     }
 
     Rule Projects() {
         return FirstOf(
-                ProjectSequence("prosjekter"),
-                ProjectSequence("engasjement"));
+                ProjectSequence("prosjekter "),
+                ProjectSequence("engasjement "));
     }
 
     Rule Technologies() {
         return FirstOf(
-                TechnologySequence("teknologier"),
-                TechnologySequence("teknologi"),
-                TechnologySequence("fag"));
+                TechnologySequence("teknologier "),
+                TechnologySequence("teknologi "),
+                TechnologySequence("fag "));
     }
 
+    Rule PeopleSequence(String name) {
+        return Sequence(push(Query.CONSULTANTS), (name));
+    }
     Rule TechnologySequence(String name) {
-        return Sequence(push(Query.TECHNOLOGIES), name);
+        return Sequence(push(Query.TECHNOLOGIES), (name));
     }
 
     Rule ProjectSequence(String name) {
-        return Sequence(push(Query.PROJECTS), name);
+        return Sequence(push(Query.PROJECTS), (name));
     }
 
     @SuppressNode
     Rule Start() {
-        return Optional(Sequence(String("Finn"), Whitepace()));
+        return Optional("Finn ");
     }
 
     Rule Know() {
-        return FirstOf("kan", "kjenner", "programmerer", "bruker", "brukes av", "brukt av");
+        return Sequence(
+                Optional(That()),
+                FirstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukes av ", "brukt av "));
     }
 
     Rule WorkedAt() {
-        return FirstOf("har jobbet på", "har jobbet hos", "konsulterte", "har konsultert", "har vært hos");
+        return Sequence(
+                Optional(That()),
+                FirstOf("har jobbet på ", "har jobbet hos ", "konsulterte ", "har konsultert ", "har vært hos "));
     }
 
     Rule Targets() {
         Rule[] rules = new Rule[tilgjengeligeFag.size()];
         for (int i = 0; i < tilgjengeligeFag.size(); i++) {
-            rules[i] = Sequence(push(new Technology(tilgjengeligeFag.get(i))), tilgjengeligeFag.get(i));
+            rules[i] = Sequence(push(new Technology(tilgjengeligeFag.get(i))), tilgjengeligeFag.get(i) + " ");
         }
         return FirstOf(rules);
     }
@@ -130,17 +122,23 @@ public class GraphSearchParser extends BaseParser<Query> {
     Rule Customers() {
         Rule[] rules = new Rule[tilgjengeligeKunder.size()];
         for (int i = 0; i < tilgjengeligeKunder.size(); i++) {
-            rules[i] = Sequence(push(new Customer(tilgjengeligeKunder.get(i))), tilgjengeligeKunder.get(i));
+            rules[i] = Sequence(push(new Customer(tilgjengeligeKunder.get(i))), tilgjengeligeKunder.get(i) + " ");
         }
         return FirstOf(rules);
     }
 
-    @SuppressNode
-    Rule Whitepace() {
-        return String(" ");
+    Rule WhiteSpace() {
+        return ZeroOrMore(AnyOf(" \t\f"));
+    }
+
+    @Override
+    protected Rule fromStringLiteral(String string) {
+        return string.endsWith(" ") ?
+               Sequence(IgnoreCase(string.substring(0, string.length() - 1)), WhiteSpace()) :
+               IgnoreCase(string);
     }
 
     Rule And() {
-        return String("og");
+        return IgnoreCase("og ");
     }
 }
