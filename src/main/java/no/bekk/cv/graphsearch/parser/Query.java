@@ -21,7 +21,7 @@ public class Query {
         return name;
     }
 
-    public void initQuery(StringBuilder start, StringBuilder match, String searchFor, String rootSearchFor) {
+    public void initQuery(StringBuilder start, StringBuilder match, String searchFor) {
         throw new IllegalStateException("This method should never be called");
     }
 
@@ -52,6 +52,6 @@ public class Query {
                 return new Relation("[:BRUKTE]", Direction.BACKWARD);
             }
         }
-        return new Relation("[:KAN]", Direction.FORWARD);
+        throw new IllegalStateException("Unknown relation type " + name);
     }
 }

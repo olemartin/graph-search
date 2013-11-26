@@ -6,20 +6,12 @@ public class Technology extends Query {
     }
 
     @Override
-    public void initQuery(StringBuilder start, StringBuilder match, String searchFor, String rootSearchFor) {
+    public void initQuery(StringBuilder start, StringBuilder match, String searchFor) {
         start.append("start fag=node:fag(navn = \"").append(getName()).append("\") \n");
-        if (rootSearchFor != null) {
-            createMatch(match, searchFor, rootSearchFor);
-        } else {
-            createMatch(match, searchFor, searchFor);
-        }
-    }
-
-    private void createMatch(StringBuilder match, String relationType, String searchFor) {
         match.append("match ")
                 .append(searchFor)
                 .append(" ")
-                .append(getRelationType(relationType).print())
+                .append(getRelationType(searchFor).print())
                 .append(" fag \n");
     }
 

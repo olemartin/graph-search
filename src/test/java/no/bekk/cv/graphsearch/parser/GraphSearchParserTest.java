@@ -34,7 +34,7 @@ public class GraphSearchParserTest {
     }
 
     @Test
-    public void testFinnAlleProsjekterSomKanJava() {
+    public void testFinnAlleProsjekterSomBrukerNeo4j() {
         String query = parser.parseQuery("Finn prosjekter som bruker Neo4J");
         assertThat(query,
                    is("start fag=node:fag(navn = \"Neo4J\") \nmatch PROJECTS -[:BRUKTE]-> fag \nreturn distinct PROJECTS"));
@@ -45,7 +45,7 @@ public class GraphSearchParserTest {
     public void testFinnAlleSomKanJavaOgNeo4j() {
         String query = parser.parseQuery("Finn alle som kan Java og som kan Neo4J");
         assertThat(query,
-                   is("start fag=node:fag(navn = \"Neo4J\") \n, fag1=node:fag(navn = \"Java\") \nmatch CONSULTANTS -[:KAN]-> fag \n, CONSULTANTS -[:KAN]-> fag1 \nreturn distinct CONSULTANTS"));
+                   is("start fag=node:fag(navn = \"Java\") \n, fag1=node:fag(navn = \"Neo4J\") \nmatch CONSULTANTS -[:KAN]-> fag \n, CONSULTANTS -[:KAN]-> fag1 \nreturn distinct CONSULTANTS"));
         System.out.println(query);
     }
 
@@ -68,9 +68,10 @@ public class GraphSearchParserTest {
     @Test
     public void testFinnAlleSomHarJobbetPaNavOgKanJavaogNeo4J() {
         String query = parser.parseQuery("Finn alle som har jobbet hos Modernisering og som kan Java og som kan Neo4J");
-        assertThat(query, is("start fag=node:fag(navn = \"Neo4J\") \n, fag1=node:fag(navn = \"Java\") \n, prosjekt2=node:prosjekt(navn = \"Modernisering\") \n" +
-                                     "match CONSULTANTS -[:KAN]-> fag \n, CONSULTANTS -[:KAN]-> fag1 \n, CONSULTANTS -[:KONSULTERTE]-> prosjekt2 \n" +
-                                     "return distinct CONSULTANTS"));
+        assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \n, fag1=node:fag(navn = \"Java\") \n," +
+                                     " fag2=node:fag(navn = \"Neo4J\") \nmatch CONSULTANTS -[:KONSULTERTE]-> prosjekt \n," +
+                                     " CONSULTANTS -[:KAN]-> fag1 \n, CONSULTANTS -[:KAN]-> fag2 \nreturn distinct CONSULTANTS"
+        ));
         System.out.println(query);
     }
 
@@ -84,6 +85,7 @@ public class GraphSearchParserTest {
     @Test
      public void testFinnAlleSomKanTeknologiBruktAvNAV() {
         String query = parser.parseQuery("Finn alle som kan teknologi brukt av Modernisering");
+
         assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \n, CONSULTANTS -[:KAN]-> TECHNOLOGIES \nreturn distinct CONSULTANTS"));
         System.out.println(query);
     }

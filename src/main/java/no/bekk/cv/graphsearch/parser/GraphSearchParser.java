@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @BuildParseTree
-public class GraphSearchParser extends BaseParser<Query> {
+public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
 
 
     static List<String> tilgjengeligeFag = new ArrayList<>();
@@ -32,7 +32,7 @@ public class GraphSearchParser extends BaseParser<Query> {
                 FirstOf(
                         People(),
                         Projects(),
-                        Technologies()
+                        Technologies(true)
                 ),
                 OneOrMore(
                         FirstOf(
@@ -51,7 +51,7 @@ public class GraphSearchParser extends BaseParser<Query> {
                                 ),
                                 Sequence(
                                         Know(),
-                                        Technologies()
+                                        Technologies(false)
                                 )
                         )
                 )
@@ -76,22 +76,30 @@ public class GraphSearchParser extends BaseParser<Query> {
                 ProjectSequence("engasjement "));
     }
 
-    Rule Technologies() {
-        return FirstOf(
-                TechnologySequence("teknologier "),
-                TechnologySequence("teknologi "),
-                TechnologySequence("fag "));
+    Rule Technologies(boolean root) {
+        if (root) {
+            return FirstOf(
+                    TechnologySequence("teknologier "),
+                    TechnologySequence("teknologi "),
+                    TechnologySequence("fag "));
+        } else {
+            return FirstOf(
+                    "teknologier ",
+                    "teknologi ",
+                    "fag ");
+        }
     }
 
     Rule PeopleSequence(String name) {
-        return Sequence(push(Query.CONSULTANTS), (name));
+        return Sequence(push(new GraphSearchQuery(Query.CONSULTANTS)), name);
     }
+
     Rule TechnologySequence(String name) {
-        return Sequence(push(Query.TECHNOLOGIES), (name));
+        return Sequence(push(new GraphSearchQuery(Query.TECHNOLOGIES)), name);
     }
 
     Rule ProjectSequence(String name) {
-        return Sequence(push(Query.PROJECTS), (name));
+        return Sequence(push(new GraphSearchQuery(Query.PROJECTS)), name);
     }
 
     @SuppressNode
@@ -114,7 +122,9 @@ public class GraphSearchParser extends BaseParser<Query> {
     Rule Subjects() {
         Rule[] rules = new Rule[tilgjengeligeFag.size()];
         for (int i = 0; i < tilgjengeligeFag.size(); i++) {
-            rules[i] = Sequence(push(new Technology(tilgjengeligeFag.get(i))), tilgjengeligeFag.get(i) + " ");
+            rules[i] = Sequence(
+                    push(pop().addTarget(new Technology(tilgjengeligeFag.get(i)))),
+                    tilgjengeligeFag.get(i) + " ");
         }
         return FirstOf(rules);
     }
@@ -122,7 +132,9 @@ public class GraphSearchParser extends BaseParser<Query> {
     Rule Customers() {
         Rule[] rules = new Rule[tilgjengeligeKunder.size()];
         for (int i = 0; i < tilgjengeligeKunder.size(); i++) {
-            rules[i] = Sequence(push(new Customer(tilgjengeligeKunder.get(i))), tilgjengeligeKunder.get(i) + " ");
+            rules[i] = Sequence(
+                    push(pop().addTarget(new Customer(tilgjengeligeKunder.get(i)))),
+                    tilgjengeligeKunder.get(i) + " ");
         }
         return FirstOf(rules);
     }

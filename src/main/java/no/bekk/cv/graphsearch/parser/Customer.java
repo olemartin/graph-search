@@ -6,7 +6,7 @@ public class Customer extends Query {
     }
 
     @Override
-    public void initQuery(StringBuilder start, StringBuilder match, String searchFor, String rootSearchFor) {
+    public void initQuery(StringBuilder start, StringBuilder match, String searchFor) {
         start.append("start prosjekt=node:prosjekt(navn = \"").append(getName()).append("\") \n");
         match.append("match ")
                 .append(searchFor)
