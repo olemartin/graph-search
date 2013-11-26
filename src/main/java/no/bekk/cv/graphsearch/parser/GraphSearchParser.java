@@ -39,7 +39,7 @@ public class GraphSearchParser extends BaseParser<Query> {
                                 And(),
                                 Sequence(
                                         Know(),
-                                        Targets()
+                                        Subjects()
                                 ),
                                 Sequence(
                                         WorkedAt(),
@@ -111,7 +111,7 @@ public class GraphSearchParser extends BaseParser<Query> {
                 FirstOf("har jobbet på ", "har jobbet hos ", "konsulterte ", "har konsultert ", "har vært hos "));
     }
 
-    Rule Targets() {
+    Rule Subjects() {
         Rule[] rules = new Rule[tilgjengeligeFag.size()];
         for (int i = 0; i < tilgjengeligeFag.size(); i++) {
             rules[i] = Sequence(push(new Technology(tilgjengeligeFag.get(i))), tilgjengeligeFag.get(i) + " ");

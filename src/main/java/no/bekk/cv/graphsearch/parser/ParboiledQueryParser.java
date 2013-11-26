@@ -3,7 +3,7 @@ package no.bekk.cv.graphsearch.parser;
 import no.bekk.cv.graphsearch.integration.PersonRepository;
 import no.bekk.cv.graphsearch.query.QueryParser;
 import org.parboiled.Parboiled;
-import org.parboiled.parserunners.TracingParseRunner;
+import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParsingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class ParboiledQueryParser implements QueryParser {
     @Override
     public String parseQuery(String query) {
         GraphSearchParser parser = Parboiled.createParser(GraphSearchParser.class);
-        TracingParseRunner runner = new TracingParseRunner(parser.Expression());
+        ReportingParseRunner<Query> runner = new ReportingParseRunner<>(parser.Expression());
         ParsingResult<Query> result = runner.run(query);
         if (!result.hasErrors()) {
             List<Query> targets = getQueries(result);
