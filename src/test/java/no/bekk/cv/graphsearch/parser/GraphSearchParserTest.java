@@ -68,24 +68,29 @@ public class GraphSearchParserTest {
     @Test
     public void testFinnAlleSomHarJobbetPaNavOgKanJavaogNeo4J() {
         String query = parser.parseQuery("Finn alle som har jobbet hos Modernisering og som kan Java og som kan Neo4J");
-        assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \n, fag1=node:fag(navn = \"Java\") \n," +
-                                     " fag2=node:fag(navn = \"Neo4J\") \nmatch CONSULTANTS -[:KONSULTERTE]-> prosjekt \n," +
-                                     " CONSULTANTS -[:KAN]-> fag1 \n, CONSULTANTS -[:KAN]-> fag2 \nreturn distinct CONSULTANTS"
-        ));
+        assertThat(query,
+                   is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \n, fag1=node:fag(navn = \"Java\") \n," +
+                              " fag2=node:fag(navn = \"Neo4J\") \nmatch CONSULTANTS -[:KONSULTERTE]-> prosjekt \n," +
+                              " CONSULTANTS -[:KAN]-> fag1 \n, CONSULTANTS -[:KAN]-> fag2 \nreturn distinct CONSULTANTS"
+                   ));
         System.out.println(query);
     }
 
     @Test
     public void testFinnTeknologiBruktAvNAV() {
         String query = parser.parseQuery("Finn teknologi brukt av Modernisering");
-        assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \nreturn distinct TECHNOLOGIES"));
+        assertThat(query,
+                   is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \nreturn distinct TECHNOLOGIES"));
         System.out.println(query);
     }
 
     @Test
-     public void testFinnAlleSomKanTeknologiBruktAvNAV() {
+    public void testFinnAlleSomKanTeknologiBruktAvNAV() {
         String query = parser.parseQuery("Finn alle som kan teknologi brukt av Modernisering");
-        assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \n, TECHNOLOGIES <-[:KAN]- CONSULTANTS \nreturn distinct CONSULTANTS"));
+        assertThat(query,
+                   is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \n, TECHNOLOGIES <-[:KAN]- CONSULTANTS \nreturn distinct CONSULTANTS"));
         System.out.println(query);
     }
+
+
 }
