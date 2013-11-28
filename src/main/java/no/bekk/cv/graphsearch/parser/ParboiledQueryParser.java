@@ -4,11 +4,11 @@ import no.bekk.cv.graphsearch.integration.PersonRepository;
 import no.bekk.cv.graphsearch.query.QueryParser;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.ReportingParseRunner;
+import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -21,49 +21,40 @@ public class ParboiledQueryParser implements QueryParser {
     }
 
     @Override
-    public String parseQuery(String query) {
+    public String parseQuery(String queryString) {
         GraphSearchParser parser = Parboiled.createParser(GraphSearchParser.class);
-        ReportingParseRunner<Query> runner = new ReportingParseRunner<>(parser.Expression());
-        ParsingResult<Query> result = runner.run(query);
+        ReportingParseRunner<GraphSearchQuery> runner = new ReportingParseRunner<>(parser.Expression());
+        ParsingResult<GraphSearchQuery> result = runner.run(queryString);
+        System.out.println(ParseTreeUtils.printNodeTree(result));
         if (!result.hasErrors()) {
-            List<Query> targets = getQueries(result);
-            String searchFor = result.valueStack.pop().getName();
-            Query realSearchFor = null;
-            if (!result.valueStack.isEmpty()) {
-                realSearchFor = result.valueStack.pop();
-                targets.add(realSearchFor);
-            }
+
+            GraphSearchQuery query = result.parseTreeRoot.getValue();
+
+            List<Query> targets = query.getTargets();
+            String searchFor = query.getReturnValue().getName();
+
             StringBuilder start = new StringBuilder();
             StringBuilder match = new StringBuilder();
-            createQuery(start, match, targets, searchFor, realSearchFor != null ? realSearchFor.getName() : null);
-            String retur = "return distinct " + (realSearchFor != null ? realSearchFor.getName() : searchFor);
+            createQuery(start, match, targets, query.getMiddleTarget(), searchFor);
+            String retur = "return distinct " + searchFor;
             return start.append(match).append(retur).toString();
         } else {
             throw new IllegalArgumentException("Ugyldig spørring");
         }
     }
 
-    private void createQuery(StringBuilder start, StringBuilder match, List<Query> targets, String searchFor, String realSearchFor) {
+    private void createQuery(StringBuilder start, StringBuilder match, List<Query> targets, Query middleTarget,
+                             String searchFor) {
         for (int i = 0; i < targets.size(); i++) {
             Query target = targets.get(i);
             if (start.length() == 0) {
-                target.initQuery(start, match, searchFor, realSearchFor);
+                target.initQuery(start, match, searchFor, middleTarget);
             } else {
-                target.appendQuery(start, match, searchFor, i);
+                target.appendQuery(start, match, searchFor, middleTarget, i);
             }
         }
-    }
-
-    private List<Query> getQueries(ParsingResult<Query> result) {
-        List<Query> targets = new LinkedList<>();
-        while (!result.valueStack.isEmpty()) {
-            Query element = result.valueStack.peek();
-            if (element instanceof Technology || element instanceof Customer) {
-                targets.add(result.valueStack.pop());
-            } else {
-                break;
-            }
+        if (middleTarget != null) {
+            middleTarget.appendQuery(start, match, searchFor, middleTarget, -1);
         }
-        return targets;
     }
 }
