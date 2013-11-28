@@ -84,10 +84,14 @@ public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
                     TechnologySequence("fag "));
         } else {
             return FirstOf(
-                    "teknologier ",
-                    "teknologi ",
-                    "fag ");
+                    InTheMiddleSequence("teknologier "),
+                    InTheMiddleSequence("teknologi "),
+                    InTheMiddleSequence("fag "));
         }
+    }
+
+    Rule InTheMiddleSequence(String name) {
+        return Sequence(push(pop().addMiddleTarget(Query.TECHNOLOGIES)), name);
     }
 
     Rule PeopleSequence(String name) {

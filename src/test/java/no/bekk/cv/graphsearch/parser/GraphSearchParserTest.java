@@ -85,8 +85,7 @@ public class GraphSearchParserTest {
     @Test
      public void testFinnAlleSomKanTeknologiBruktAvNAV() {
         String query = parser.parseQuery("Finn alle som kan teknologi brukt av Modernisering");
-
-        assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \n, CONSULTANTS -[:KAN]-> TECHNOLOGIES \nreturn distinct CONSULTANTS"));
+        assertThat(query, is("start prosjekt=node:prosjekt(navn = \"Modernisering\") \nmatch TECHNOLOGIES <-[:BRUKTE]- prosjekt \n, TECHNOLOGIES <-[:KAN]- CONSULTANTS \nreturn distinct CONSULTANTS"));
         System.out.println(query);
     }
 }

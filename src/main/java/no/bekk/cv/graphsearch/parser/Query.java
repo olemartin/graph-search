@@ -21,11 +21,11 @@ public class Query {
         return name;
     }
 
-    public void initQuery(StringBuilder start, StringBuilder match, String searchFor) {
+    public void initQuery(StringBuilder start, StringBuilder match, String searchFor, Query middleTarget) {
         throw new IllegalStateException("This method should never be called");
     }
 
-    public void appendQuery(StringBuilder start, StringBuilder match, String searchFor, int count) {
+    public void appendQuery(StringBuilder start, StringBuilder match, String searchFor, Query middleTarget, int count) {
         match.append(", ")
                 .append(this.getName())
                 .append(" ")
@@ -50,6 +50,10 @@ public class Query {
             }
             if (name.equals(TECHNOLOGIES.getName())) {
                 return new Relation("[:BRUKTE]", Direction.BACKWARD);
+            }
+        } else {
+            if (name.equals(CONSULTANTS.getName())) {
+                return new Relation("[:KAN]", Direction.BACKWARD);
             }
         }
         throw new IllegalStateException("Unknown relation type " + name);

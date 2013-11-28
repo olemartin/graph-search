@@ -6,7 +6,7 @@ public class Technology extends Query {
     }
 
     @Override
-    public void initQuery(StringBuilder start, StringBuilder match, String searchFor) {
+    public void initQuery(StringBuilder start, StringBuilder match, String searchFor, Query middleTarget) {
         start.append("start fag=node:fag(navn = \"").append(getName()).append("\") \n");
         match.append("match ")
                 .append(searchFor)
@@ -16,7 +16,7 @@ public class Technology extends Query {
     }
 
     @Override
-    public void appendQuery(StringBuilder start, StringBuilder match, String searchFor, int count) {
+    public void appendQuery(StringBuilder start, StringBuilder match, String searchFor, Query middleTarget, int count) {
         start.append(", fag").append(count).append("=node:fag(navn = \"").append(getName()).append("\") \n");
         match.append(", ")
                 .append(searchFor)

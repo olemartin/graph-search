@@ -7,6 +7,7 @@ import java.util.List;
 public class GraphSearchQuery {
     private Query returnValue;
     private ImmutableList<Query> targets = ImmutableList.of();
+    private Query middleTarget;
 
     public GraphSearchQuery() {
     }
@@ -15,13 +16,15 @@ public class GraphSearchQuery {
         this.returnValue = returnValue;
     }
 
-    private GraphSearchQuery(Query returnValue, ImmutableList<Query> targets) {
+    private GraphSearchQuery(Query returnValue, ImmutableList<Query> targets, Query middleTarget) {
+
         this.returnValue = returnValue;
         this.targets = targets;
+        this.middleTarget = middleTarget;
     }
 
     public GraphSearchQuery addTarget(Query target) {
-        return new GraphSearchQuery(this.returnValue, ImmutableList.of(this.targets, target));
+        return new GraphSearchQuery(this.returnValue, ImmutableList.of(this.targets, target), middleTarget);
     }
 
     public List<Query> getTargets() {
@@ -30,5 +33,13 @@ public class GraphSearchQuery {
 
     public Query getReturnValue() {
         return returnValue;
+    }
+
+    public Query getMiddleTarget() {
+        return middleTarget;
+    }
+
+    public GraphSearchQuery addMiddleTarget(Query query) {
+        return new GraphSearchQuery(this.returnValue, this.targets, query);
     }
 }
