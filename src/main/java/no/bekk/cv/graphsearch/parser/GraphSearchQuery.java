@@ -8,23 +8,23 @@ public class GraphSearchQuery {
     private Query returnValue;
     private ImmutableList<Query> targets = ImmutableList.of();
     private Query middleTarget;
-
-    public GraphSearchQuery() {
-    }
+    private boolean retrieveParameters = false;
 
     public GraphSearchQuery(Query returnValue) {
         this.returnValue = returnValue;
     }
 
-    private GraphSearchQuery(Query returnValue, ImmutableList<Query> targets, Query middleTarget) {
+    private GraphSearchQuery(Query returnValue, ImmutableList<Query> targets, Query middleTarget,
+                             boolean retrieveParameters) {
 
         this.returnValue = returnValue;
         this.targets = targets;
         this.middleTarget = middleTarget;
+        this.retrieveParameters = retrieveParameters;
     }
 
     public GraphSearchQuery addTarget(Query target) {
-        return new GraphSearchQuery(this.returnValue, ImmutableList.of(this.targets, target), middleTarget);
+        return new GraphSearchQuery(this.returnValue, ImmutableList.of(this.targets, target), middleTarget, retrieveParameters);
     }
 
     public List<Query> getTargets() {
@@ -40,6 +40,15 @@ public class GraphSearchQuery {
     }
 
     public GraphSearchQuery addMiddleTarget(Query query) {
-        return new GraphSearchQuery(this.returnValue, this.targets, query);
+        return new GraphSearchQuery(this.returnValue, this.targets, query, retrieveParameters);
+    }
+
+
+    public GraphSearchQuery setRetrieveParameters(boolean retrieveParameters) {
+        return new GraphSearchQuery(this.returnValue, this.targets, middleTarget, retrieveParameters);
+    }
+
+    public boolean isRetrieveParameters() {
+        return retrieveParameters;
     }
 }

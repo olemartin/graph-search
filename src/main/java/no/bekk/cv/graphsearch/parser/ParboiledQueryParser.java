@@ -29,15 +29,19 @@ public class ParboiledQueryParser implements QueryParser {
         if (!result.hasErrors()) {
 
             GraphSearchQuery query = result.parseTreeRoot.getValue();
-
             List<Query> targets = query.getTargets();
             String searchFor = query.getReturnValue().getName();
 
             StringBuilder start = new StringBuilder();
             StringBuilder match = new StringBuilder();
-            createQuery(start, match, targets, query.getMiddleTarget(), searchFor);
-            String retur = "return distinct " + searchFor;
-            return start.append(match).append(retur).toString();
+
+            if (query.isRetrieveParameters()) {
+                return "start person1=node(*) \nmatch fag <-[:KAN]- person1 \nreturn distinct fag";
+            } else {
+                createQuery(start, match, targets, query.getMiddleTarget(), searchFor);
+                String retur = "return distinct " + searchFor;
+                return start.append(match).append(retur).toString();
+            }
         } else {
             throw new IllegalArgumentException("Ugyldig spørring");
         }

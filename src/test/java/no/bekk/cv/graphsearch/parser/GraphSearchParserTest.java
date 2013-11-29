@@ -92,5 +92,13 @@ public class GraphSearchParserTest {
         System.out.println(query);
     }
 
-
+    @Test
+    public void finnAlleSomKan() {
+        String query = parser.parseQuery("Finn alle som kan ");
+        assertThat(query,
+                   is("start person1=node(*) \n" +
+                              "match fag <-[:KAN]- person1 \n" +
+                              "return distinct fag"));
+        System.out.println(query);
+    }
 }

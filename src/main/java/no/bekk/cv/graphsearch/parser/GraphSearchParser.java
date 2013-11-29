@@ -38,7 +38,7 @@ public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
                         FirstOf(
                                 And(),
                                 Sequence(
-                                        Know(),
+                                        Know(false),
                                         Subjects()
                                 ),
                                 Sequence(
@@ -46,13 +46,14 @@ public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
                                         Customers()
                                 ),
                                 Sequence(
-                                        Know(),
+                                        Know(false),
                                         Customers()
                                 ),
                                 Sequence(
-                                        Know(),
+                                        Know(false),
                                         Technologies(false)
-                                )
+                                ),
+                                Know(true)
                         )
                 )
         );
@@ -111,8 +112,9 @@ public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
         return Optional("Finn ");
     }
 
-    Rule Know() {
+    Rule Know(boolean empty) {
         return Sequence(
+                push(pop().setRetrieveParameters(empty)),
                 Optional(That()),
                 FirstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukes av ", "brukt av "));
     }
