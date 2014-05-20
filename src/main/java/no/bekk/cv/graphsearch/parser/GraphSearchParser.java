@@ -113,10 +113,18 @@ public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
     }
 
     Rule Know(boolean empty) {
-        return Sequence(
-                push(pop().setRetrieveParameters(empty)),
-                Optional(That()),
-                FirstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukes av ", "brukt av "));
+        Rule verbs = FirstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukte ", "brukes av ", "brukt av ");
+        if (empty) {
+            return Sequence(
+                    push(pop().setRetrieveParameters(true).addTarget(new SearchForUsedTechology())),
+                    Optional(That()),
+                    verbs);
+        } else {
+            return Sequence(
+                    push(pop().setRetrieveParameters(false)),
+                    Optional(That()),
+                    verbs);
+        }
     }
 
     Rule WorkedAt() {

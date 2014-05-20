@@ -8,14 +8,14 @@ public class GraphSearchQuery {
     private Query returnValue;
     private ImmutableList<Query> targets = ImmutableList.of();
     private Query middleTarget;
-    private boolean retrieveParameters = false;
+    private RetrieveParameters retrieveParameters;
 
     public GraphSearchQuery(Query returnValue) {
         this.returnValue = returnValue;
     }
 
     private GraphSearchQuery(Query returnValue, ImmutableList<Query> targets, Query middleTarget,
-                             boolean retrieveParameters) {
+                             RetrieveParameters retrieveParameters) {
 
         this.returnValue = returnValue;
         this.targets = targets;
@@ -44,11 +44,15 @@ public class GraphSearchQuery {
     }
 
 
-    public GraphSearchQuery setRetrieveParameters(boolean retrieveParameters) {
-        return new GraphSearchQuery(this.returnValue, this.targets, middleTarget, retrieveParameters);
+    public GraphSearchQuery setRetrieveParameters(boolean retrieveParameters, String know) {
+        return new GraphSearchQuery(this.returnValue, this.targets, middleTarget, new RetrieveParameters(retrieveParameters, know));
     }
 
     public boolean isRetrieveParameters() {
-        return retrieveParameters;
+        return retrieveParameters != null && retrieveParameters.isRetrieveParameters();
+    }
+
+    public GraphSearchQuery setRetrieveParameters(boolean retrieveParameters) {
+        return setRetrieveParameters(retrieveParameters, null);
     }
 }

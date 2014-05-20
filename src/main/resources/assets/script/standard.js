@@ -117,7 +117,7 @@ $(function () {
                     options.empty();
                     options.show();
                     $.each(msg.navn, function (index, value) {
-                        var text = query + '"' + value + '"';
+                        var text = query  + value;
                         options.append("<li class='option' data-text='" + text + "'>" + text + "</li>");
                         $("li.option").click(clickOption);
                         $("li.option").keydown(funk);

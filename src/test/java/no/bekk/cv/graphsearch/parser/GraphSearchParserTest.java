@@ -96,9 +96,15 @@ public class GraphSearchParserTest {
     public void finnAlleSomKan() {
         String query = parser.parseQuery("Finn alle som kan ");
         assertThat(query,
-                   is("start person1=node(*) \n" +
-                              "match fag <-[:KAN]- person1 \n" +
-                              "return distinct fag"));
+                   is("start wildcard=node(*) \nmatch CONSULTANTS <-[:KAN]- wildcard \nreturn distinct CONSULTANTS"));
+        System.out.println(query);
+    }
+
+    @Test
+    public void finnProsjekterSomBrukte() {
+        String query = parser.parseQuery("Finn prosjekter som bruker ");
+        assertThat(query,
+                is("start wildcard=node(*) \nmatch PROJECTS <-[:BRUKTE]- wildcard \nreturn distinct PROJECTS"));
         System.out.println(query);
     }
 }

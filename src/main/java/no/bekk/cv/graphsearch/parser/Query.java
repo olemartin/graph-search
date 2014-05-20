@@ -51,6 +51,13 @@ public class Query {
             if (name.equals(TECHNOLOGIES.getName())) {
                 return new Relation("[:BRUKTE]", Direction.BACKWARD);
             }
+        } else if (this instanceof SearchForUsedTechology) {
+            if (name.equals(CONSULTANTS.getName())) {
+                return new Relation("[:KAN]", Direction.BACKWARD);
+            }
+            if (name.equals(PROJECTS.getName())) {
+                return new Relation("[:BRUKTE]", Direction.BACKWARD);
+            }
         } else {
             if (name.equals(CONSULTANTS.getName())) {
                 return new Relation("[:KAN]", Direction.BACKWARD);

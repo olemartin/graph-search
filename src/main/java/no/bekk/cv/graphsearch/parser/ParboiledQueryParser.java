@@ -36,14 +36,16 @@ public class ParboiledQueryParser implements QueryParser {
             StringBuilder match = new StringBuilder();
 
             if (query.isRetrieveParameters()) {
-                return "start person1=node(*) \nmatch fag <-[:KAN]- person1 \nreturn distinct fag";
+                createQuery(start, match, targets, query.getMiddleTarget(), searchFor);
+                String retur = "return distinct " + searchFor;
+                return start.append(match).append(retur).toString();
             } else {
                 createQuery(start, match, targets, query.getMiddleTarget(), searchFor);
                 String retur = "return distinct " + searchFor;
                 return start.append(match).append(retur).toString();
             }
         } else {
-            throw new IllegalArgumentException("Ugyldig spørring");
+            throw new IllegalArgumentException("Ugyldig spørring, " + result.parseErrors);
         }
     }
 
