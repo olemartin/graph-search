@@ -33,29 +33,29 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     }
 
     public Rule Expression() {
-        return Sequence(
+        return sequence(
                 Start(),
-                FirstOf(
+                firstOf(
                         People(),
                         Projects(),
                         Technologies(true)
                 ),
-                OneOrMore(
-                        FirstOf(
+                oneOrMore(
+                        firstOf(
                                 And(),
-                                Sequence(
+                                sequence(
                                         Know(false),
                                         Subjects()
                                 ),
-                                Sequence(
+                                sequence(
                                         WorkedAt(false),
                                         Customers()
                                 ),
-                                Sequence(
+                                sequence(
                                         Know(false),
                                         Customers()
                                 ),
-                                Sequence(
+                                sequence(
                                         Know(false),
                                         Technologies(false)
                                 ),
@@ -68,12 +68,12 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
     @SuppressNode
     Rule That() {
-        return Optional("som ");
+        return optional("som ");
     }
 
     Rule People() {
         List<String> subjects = Arrays.asList("alle konsulenter ", "alle ", "konsulenter ");
-         return FirstOf(Lists.transform(subjects, new Function<String, Object>() {
+        return firstOf(Lists.transform(subjects, new Function<String, Object>() {
             public Object apply(String input) {
                 return PeopleSequence(input);
             }
@@ -82,7 +82,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
     Rule Projects() {
         List<String> subjects = Arrays.asList("prosjekter ", "engasjement ");
-        return FirstOf(Lists.transform(subjects, new Function<String, Object>() {
+        return firstOf(Lists.transform(subjects, new Function<String, Object>() {
             public Object apply(String input) {
                 return ProjectSequence(input);
             }
@@ -92,13 +92,13 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     Rule Technologies(boolean root) {
         List<String> subjects = Arrays.asList("teknologier ", "teknologi ", "fag ");
         if (root) {
-            return FirstOf(Lists.transform(subjects, new Function<String, Object>() {
+            return firstOf(Lists.transform(subjects, new Function<String, Object>() {
                 public Object apply(String input) {
                     return TechnologySequence(input);
                 }
             }).toArray());
         } else {
-            return FirstOf(Lists.transform(subjects, new Function<String, Object>() {
+            return firstOf(Lists.transform(subjects, new Function<String, Object>() {
                 public Object apply(String input) {
                     return InTheMiddleSequence(input);
                 }
@@ -107,51 +107,51 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     }
 
     Rule InTheMiddleSequence(String name) {
-        return Sequence(push(pop().addMiddleTarget(Query.TECHNOLOGIES)), name);
+        return sequence(push(pop().addMiddleTarget(Query.TECHNOLOGIES)), name);
     }
 
     Rule PeopleSequence(String name) {
-        return Sequence(push(new GraphSearchQuery(Query.CONSULTANTS)), name);
+        return sequence(push(new GraphSearchQuery(Query.CONSULTANTS)), name);
     }
 
     Rule TechnologySequence(String name) {
-        return Sequence(push(new GraphSearchQuery(Query.TECHNOLOGIES)), name);
+        return sequence(push(new GraphSearchQuery(Query.TECHNOLOGIES)), name);
     }
 
     Rule ProjectSequence(String name) {
-        return Sequence(push(new GraphSearchQuery(Query.PROJECTS)), name);
+        return sequence(push(new GraphSearchQuery(Query.PROJECTS)), name);
     }
 
     @SuppressNode
     Rule Start() {
-        return Optional("Finn ");
+        return optional("Finn ");
     }
 
     Rule Know(boolean empty) {
-        Rule verbs = FirstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukte ", "brukes av ", "brukt av ");
+        Rule verbs = firstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukte ", "brukes av ", "brukt av ");
         if (empty) {
-            return Sequence(
+            return sequence(
                     push(pop().setRetrieveParameters(true).addTarget(new UsedTechology())),
-                    Optional(That()),
+                    optional(That()),
                     verbs);
         } else {
-            return Sequence(
-                    Optional(That()),
+            return sequence(
+                    optional(That()),
                     verbs);
         }
     }
 
     Rule WorkedAt(boolean empty) {
-        Rule verbs = FirstOf("har jobbet på ", "har jobbet hos ", "konsulterte ", "har konsultert ", "har vært hos ");
+        Rule verbs = firstOf("har jobbet på ", "har jobbet hos ", "konsulterte ", "har konsultert ", "har vært hos ");
         if (empty) {
 
-            return Sequence(
+            return sequence(
                     push(pop().setRetrieveParameters(true).addTarget(new WorkedAt())),
-                    Optional(That()),
+                    optional(That()),
                     verbs);
         } else {
-            return Sequence(
-                    Optional(That()),
+            return sequence(
+                    optional(That()),
                     verbs);
         }
     }
@@ -159,35 +159,35 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     Rule Subjects() {
         Rule[] rules = new Rule[tilgjengeligeFag.size()];
         for (int i = 0; i < tilgjengeligeFag.size(); i++) {
-            rules[i] = Sequence(
+            rules[i] = sequence(
                     push(pop().addTarget(new Technology(tilgjengeligeFag.get(i)))),
                     tilgjengeligeFag.get(i) + " ");
         }
-        return FirstOf(rules);
+        return firstOf(rules);
     }
 
     Rule Customers() {
         Rule[] rules = new Rule[tilgjengeligeKunder.size()];
         for (int i = 0; i < tilgjengeligeKunder.size(); i++) {
-            rules[i] = Sequence(
+            rules[i] = sequence(
                     push(pop().addTarget(new Customer(tilgjengeligeKunder.get(i)))),
                     tilgjengeligeKunder.get(i) + " ");
         }
-        return FirstOf(rules);
+        return firstOf(rules);
     }
 
     Rule WhiteSpace() {
-        return ZeroOrMore(AnyOf(" \t\f"));
+        return zeroOrMore(anyOf(" \t\f"));
     }
 
     @Override
     protected Rule fromStringLiteral(String string) {
         return string.endsWith(" ") ?
-                Sequence(IgnoreCase(string.substring(0, string.length() - 1)), WhiteSpace()) :
-                IgnoreCase(string);
+                sequence(ignoreCase(string.substring(0, string.length() - 1)), WhiteSpace()) :
+                ignoreCase(string);
     }
 
     Rule And() {
-        return IgnoreCase("og ");
+        return ignoreCase("og ");
     }
 }

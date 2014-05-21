@@ -16,9 +16,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.parboiled</groupId>
-            <artifactId>parboiled-java</artifactId>
-            <version>1.1.6</version>
+            <groupId>com.github.parboiled1</groupId>
+            <artifactId>grappa</artifactId>
+            <version>1.0.0-beta.7</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>

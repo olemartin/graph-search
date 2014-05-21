@@ -1,6 +1,6 @@
 package no.bekk.cv.graphsearch.parser.domain;
 
-import org.parboiled.common.ImmutableList;
+import com.google.common.collect.ImmutableList;
 
 import java.util.List;
 
@@ -24,7 +24,8 @@ public class GraphSearchQuery {
     }
 
     public GraphSearchQuery addTarget(Query target) {
-        return new GraphSearchQuery(this.returnValue, ImmutableList.of(this.targets, target), middleTarget, retrieveParameters);
+        ImmutableList<Query> list = ImmutableList.<Query>builder().addAll(this.targets).add(target).build();
+        return new GraphSearchQuery(this.returnValue, list, middleTarget, retrieveParameters);
     }
 
     public List<Query> getTargets() {
