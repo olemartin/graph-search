@@ -1,7 +1,5 @@
 package no.bekk.cv.graphsearch.parser.parboiled;
 
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
 import no.bekk.cv.graphsearch.parser.domain.*;
@@ -10,6 +8,7 @@ import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
 import org.parboiled.annotations.SuppressNode;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,36 +72,20 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
     Rule people() {
         List<String> subjects = Arrays.asList("alle konsulenter ", "alle ", "konsulenter ");
-        return firstOf(Lists.transform(subjects, new Function<String, Object>() {
-            public Object apply(String input) {
-                return peopleSequence(input);
-            }
-        }).toArray());
+        return firstOf(subjects.stream().map(this::peopleSequence).toArray());
     }
 
     Rule projects() {
         List<String> subjects = Arrays.asList("prosjekter ", "engasjement ");
-        return firstOf(Lists.transform(subjects, new Function<String, Object>() {
-            public Object apply(String input) {
-                return projectSequence(input);
-            }
-        }).toArray());
+        return firstOf(subjects.stream().map(this::projectSequence).toArray());
     }
 
     Rule technologies(boolean root) {
         List<String> subjects = Arrays.asList("teknologier ", "teknologi ", "fag ");
         if (root) {
-            return firstOf(Lists.transform(subjects, new Function<String, Object>() {
-                public Object apply(String input) {
-                    return technologySequence(input);
-                }
-            }).toArray());
+            return firstOf(subjects.stream().map(this::technologySequence).toArray());
         } else {
-            return firstOf(Lists.transform(subjects, new Function<String, Object>() {
-                public Object apply(String input) {
-                    return inTheMiddleSequence(input);
-                }
-            }).toArray());
+            return firstOf(subjects.stream().map(this::inTheMiddleSequence).toArray());
         }
     }
 
@@ -181,7 +164,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     }
 
     @Override
-    protected Rule fromStringLiteral(String string) {
+    protected Rule fromStringLiteral(@Nonnull String string) {
         return string.endsWith(" ") ?
                 sequence(ignoreCase(string.substring(0, string.length() - 1)), whiteSpace()) :
                 ignoreCase(string);
