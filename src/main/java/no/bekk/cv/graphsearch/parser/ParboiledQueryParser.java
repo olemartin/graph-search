@@ -8,6 +8,7 @@ import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -15,12 +16,15 @@ import java.util.List;
 @Component
 public class ParboiledQueryParser implements QueryParser {
 
+    private final PersonRepository repository;
+
     @Autowired
     public ParboiledQueryParser(PersonRepository repository) {
-        GraphSearchParser.init(repository.hentAlleFag(), repository.hentAlleKunder());
+        this.repository = repository;
     }
 
     @Override
+    @Transactional
     public String parseQuery(String queryString) {
         GraphSearchParser parser = Parboiled.createParser(GraphSearchParser.class);
         ReportingParseRunner<GraphSearchQuery> runner = new ReportingParseRunner<>(parser.Expression());

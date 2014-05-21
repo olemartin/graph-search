@@ -1,7 +1,6 @@
 package no.bekk.cv.graphsearch.integration;
 
 
-import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Person;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +12,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:config/applicationContext.xml")
@@ -33,18 +29,6 @@ public class PersonRepositoryIntTest {
     public void initDatabase() {
         repo.populate();
     }
-
-    @Test
-    public void testHentFagSomPersonenKan() {
-        Iterable<Fag> fag = personRepository.hentFagSomPersonenKan("Andreas Heim");
-        int i = 0;
-
-        for (Fag ignored : fag) {
-            i++;
-        }
-        assertThat(i, is(3));
-    }
-
 
     @Test
     public void testCypher() {

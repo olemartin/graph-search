@@ -38,29 +38,32 @@ public class Query {
     protected Relation getRelationType(String name) {
         if (this instanceof Technology) {
             if (name.equals(CONSULTANTS.getName())) {
-                return new Relation("[:KAN]", Direction.FORWARD);
+                return new Relation(RelationType.KAN, Direction.FORWARD);
             }
             if (name.equals(PROJECTS.getName())) {
-                return new Relation("[:BRUKTE]", Direction.FORWARD);
+                return new Relation(RelationType.BRUKTE, Direction.FORWARD);
             }
         } else if (this instanceof Customer) {
-            System.out.println(name);
             if (name.equals(CONSULTANTS.getName())) {
-                return new Relation("[:KONSULTERTE]", Direction.FORWARD);
+                return new Relation(RelationType.KONSULTERTE, Direction.FORWARD);
             }
             if (name.equals(TECHNOLOGIES.getName())) {
-                return new Relation("[:BRUKTE]", Direction.BACKWARD);
+                return new Relation(RelationType.BRUKTE, Direction.BACKWARD);
             }
-        } else if (this instanceof SearchForUsedTechology) {
+        } else if (this instanceof UsedTechology) {
             if (name.equals(CONSULTANTS.getName())) {
-                return new Relation("[:KAN]", Direction.BACKWARD);
+                return new Relation(RelationType.KAN, Direction.BACKWARD);
             }
             if (name.equals(PROJECTS.getName())) {
-                return new Relation("[:BRUKTE]", Direction.BACKWARD);
+                return new Relation(RelationType.BRUKTE, Direction.BACKWARD);
+            }
+        } else if (this instanceof WorkedAt) {
+            if (name.equals(CONSULTANTS.getName())) {
+                return new Relation(RelationType.KONSULTERTE, Direction.BACKWARD);
             }
         } else {
             if (name.equals(CONSULTANTS.getName())) {
-                return new Relation("[:KAN]", Direction.BACKWARD);
+                return new Relation(RelationType.KAN, Direction.BACKWARD);
             }
         }
         throw new IllegalStateException("Unknown relation type " + name);

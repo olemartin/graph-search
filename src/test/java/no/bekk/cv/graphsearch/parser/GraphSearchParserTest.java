@@ -5,7 +5,8 @@ import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
 import no.bekk.cv.graphsearch.integration.PersonRepository;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import scala.actors.threadpool.Arrays;
+
+import java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -19,9 +20,9 @@ public class GraphSearchParserTest {
     @BeforeClass
     public static void setup() {
         PersonRepository repository = mock(PersonRepository.class);
-        when(repository.hentAlleFag()).thenReturn(Arrays.asList(new Fag[]{new Fag("Java"), new Fag("Neo4J")}));
+        when(repository.hentAlleFag()).thenReturn(Arrays.asList(new Fag("Java"), new Fag("Neo4J")));
         when(repository.hentAlleKunder()).thenReturn(
-                Arrays.asList(new Prosjekt[]{new Prosjekt("Modernisering"), new Prosjekt("Statens vegvesen")}));
+                Arrays.asList(new Prosjekt("Modernisering"), new Prosjekt("Statens vegvesen")));
         parser = new ParboiledQueryParser(repository);
     }
 
@@ -105,6 +106,14 @@ public class GraphSearchParserTest {
         String query = parser.parseQuery("Finn prosjekter som bruker ");
         assertThat(query,
                 is("start wildcard=node(*) \nmatch PROJECTS <-[:BRUKTE]- wildcard \nreturn distinct PROJECTS"));
+        System.out.println(query);
+    }
+
+    @Test
+    public void testFinnAlleSomHarJobbetHos() {
+        String query = parser.parseQuery("FINN ALLE SOM HAR JOBBET HOS ");
+        assertThat(query,
+                is("start wildcard=node(*) \nmatch CONSULTANTS <-[:KONSULTERTE]- wildcard \nreturn distinct CONSULTANTS"));
         System.out.println(query);
     }
 }

@@ -1,2 +1,6 @@
-http:
-  rootPath: /rest/*  # Default is /*
+server:
+ type: simple
+ connector:
+   type: http
+   port: 8080
+ applicationContextPath: /
