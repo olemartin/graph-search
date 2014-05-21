@@ -1,7 +1,7 @@
 package no.bekk.cv.graphsearch.resource;
 
 
-import no.bekk.cv.graphsearch.integration.Repo;
+import no.bekk.cv.graphsearch.integration.RepositoryPopulator;
 import no.bekk.cv.graphsearch.query.QueryParser;
 import no.bekk.cv.graphsearch.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
+import java.util.List;
 
 @Path("/")
 @Produces(MediaType.APPLICATION_JSON)
@@ -20,7 +21,7 @@ import java.util.ArrayList;
 public class SearchResource {
 
     @Autowired
-    private Repo repository;
+    private RepositoryPopulator repository;
 
     @Autowired
     private SearchService searchService;
@@ -30,16 +31,16 @@ public class SearchResource {
 
     @GET
     @Path("database/sok")
-    public Result query(@QueryParam("term") String query) {
+    public SearchResult query(@QueryParam("term") String query) {
         try {
             String cypher = parser.parseQuery(query);
             System.out.println(query);
             System.out.println(cypher);
-            Iterable<String> personer = searchService.search(cypher);
+            List<String> personer = searchService.search(cypher);
 
-            return new Result(personer, cypher);
+            return new SearchResult(personer, cypher);
         } catch (IllegalArgumentException e) {
-            return new Result(new ArrayList<String>(), "");
+            return new SearchResult(new ArrayList<String>(), "");
         }
     }
 
@@ -49,5 +50,4 @@ public class SearchResource {
         repository.populate();
         return true;
     }
-
 }

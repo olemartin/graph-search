@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface PersonRepository extends GraphRepository<Person> {
+public interface GraphSearchRepository extends GraphRepository<Person> {
 
     @Query("start fag=node:fag(\"*:*\") return distinct fag")
     public List<Fag> hentAlleFag();

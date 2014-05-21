@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class Repo {
+public class RepositoryPopulator {
 
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired

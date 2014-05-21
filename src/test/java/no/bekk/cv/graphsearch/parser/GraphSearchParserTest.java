@@ -2,7 +2,7 @@ package no.bekk.cv.graphsearch.parser;
 
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
-import no.bekk.cv.graphsearch.integration.PersonRepository;
+import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,7 +19,7 @@ public class GraphSearchParserTest {
     @SuppressWarnings("unchecked")
     @BeforeClass
     public static void setup() {
-        PersonRepository repository = mock(PersonRepository.class);
+        GraphSearchRepository repository = mock(GraphSearchRepository.class);
         when(repository.hentAlleFag()).thenReturn(Arrays.asList(new Fag("Java"), new Fag("Neo4J")));
         when(repository.hentAlleKunder()).thenReturn(
                 Arrays.asList(new Prosjekt("Modernisering"), new Prosjekt("Statens vegvesen")));

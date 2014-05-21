@@ -5,7 +5,7 @@ import io.dropwizard.Application;
 import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import no.bekk.cv.graphsearch.integration.PersonRepository;
+import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
 import no.bekk.cv.graphsearch.parser.GraphSearchParser;
 import no.bekk.cv.graphsearch.resource.SearchResource;
 import org.springframework.context.ApplicationContext;
@@ -33,7 +33,7 @@ public class GraphService extends Application<GraphConfiguration> {
         applicationContext.refresh();
 
         SearchResource restResource = applicationContext.getBean(SearchResource.class);
-        PersonRepository repository = applicationContext.getBean(PersonRepository.class);
+        GraphSearchRepository repository = applicationContext.getBean(GraphSearchRepository.class);
         GraphSearchParser.init(repository.hentAlleFag(), repository.hentAlleKunder());
         environment.jersey().register(restResource);
         environment.jersey().setUrlPattern("/rest/*");

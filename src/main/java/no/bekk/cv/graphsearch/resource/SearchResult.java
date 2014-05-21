@@ -3,14 +3,12 @@ package no.bekk.cv.graphsearch.resource;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Result {
+public class SearchResult {
     private List<String> navn = new ArrayList<>();
     private String cypher;
 
-    public Result(Iterable<String> navn, String cypher) {
-        for (String s : navn) {
-            this.navn.add(s);
-        }
+    public SearchResult(List<String> strings, String cypher) {
+        this.navn = strings;
         this.cypher = cypher;
     }
 

@@ -19,10 +19,10 @@ import java.util.HashMap;
 public class PersonRepositoryIntTest {
 
     @Autowired
-    PersonRepository personRepository;
+    GraphSearchRepository personRepository;
 
     @Autowired
-    Repo repo;
+    RepositoryPopulator repo;
 
 
     @Before

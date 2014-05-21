@@ -23,7 +23,7 @@ public class GraphRepositoryTest {
 
 
     @Autowired
-    Repo repo;
+    RepositoryPopulator repo;
 
     @Test
     @Transactional

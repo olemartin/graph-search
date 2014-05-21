@@ -1,6 +1,6 @@
 package no.bekk.cv.graphsearch.parser;
 
-import no.bekk.cv.graphsearch.integration.PersonRepository;
+import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
 import no.bekk.cv.graphsearch.query.QueryParser;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.ReportingParseRunner;
@@ -16,10 +16,10 @@ import java.util.List;
 @Component
 public class ParboiledQueryParser implements QueryParser {
 
-    private final PersonRepository repository;
+    private final GraphSearchRepository repository;
 
     @Autowired
-    public ParboiledQueryParser(PersonRepository repository) {
+    public ParboiledQueryParser(GraphSearchRepository repository) {
         this.repository = repository;
     }
 
