@@ -20,7 +20,7 @@ public class GraphParser implements QueryParser {
     @Transactional
     public String parseQuery(String queryString) {
         GraphGrammar parser = Parboiled.createParser(GraphGrammar.class);
-        ReportingParseRunner<GraphSearchQuery> runner = new ReportingParseRunner<>(parser.Expression());
+        ReportingParseRunner<GraphSearchQuery> runner = new ReportingParseRunner<>(parser.expression());
         ParsingResult<GraphSearchQuery> result = runner.run(queryString);
         System.out.println(ParseTreeUtils.printNodeTree(result));
         if (!result.hasErrors()) {
