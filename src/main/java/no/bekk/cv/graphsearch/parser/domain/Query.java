@@ -1,6 +1,4 @@
-package no.bekk.cv.graphsearch.parser;
-
-import no.bekk.cv.graphsearch.query.Direction;
+package no.bekk.cv.graphsearch.parser.domain;
 
 public class Query {
     public static Query CONSULTANTS = new Query("CONSULTANTS");

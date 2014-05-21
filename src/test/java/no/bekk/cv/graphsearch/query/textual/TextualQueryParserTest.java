@@ -1,5 +1,6 @@
-package no.bekk.cv.graphsearch.query;
+package no.bekk.cv.graphsearch.query.textual;
 
+import no.bekk.cv.graphsearch.parser.textual.TextualQueryParser;
 import org.junit.Test;
 
 import static org.hamcrest.core.Is.is;

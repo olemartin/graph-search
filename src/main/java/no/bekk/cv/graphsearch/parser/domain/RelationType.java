@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.domain;
 
 public class RelationType {
     public static final String KAN = "[:KAN]";

@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.query;
+package no.bekk.cv.graphsearch.parser.domain;
 
 public class Pair {
     private final String relation;

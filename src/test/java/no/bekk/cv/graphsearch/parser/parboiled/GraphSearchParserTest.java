@@ -1,8 +1,7 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.parboiled;
 
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
-import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -10,20 +9,16 @@ import java.util.Arrays;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class GraphSearchParserTest {
-    private static ParboiledQueryParser parser;
+    private static GraphParser parser;
 
     @SuppressWarnings("unchecked")
     @BeforeClass
     public static void setup() {
-        GraphSearchRepository repository = mock(GraphSearchRepository.class);
-        when(repository.hentAlleFag()).thenReturn(Arrays.asList(new Fag("Java"), new Fag("Neo4J")));
-        when(repository.hentAlleKunder()).thenReturn(
+        GraphGrammar.init(Arrays.asList(new Fag("Java"), new Fag("Neo4J")),
                 Arrays.asList(new Prosjekt("Modernisering"), new Prosjekt("Statens vegvesen")));
-        parser = new ParboiledQueryParser(repository);
+        parser = new GraphParser();
     }
 
     @Test

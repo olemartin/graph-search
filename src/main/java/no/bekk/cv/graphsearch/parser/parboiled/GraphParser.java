@@ -1,12 +1,12 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.parboiled;
 
-import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
-import no.bekk.cv.graphsearch.query.QueryParser;
+import no.bekk.cv.graphsearch.parser.QueryParser;
+import no.bekk.cv.graphsearch.parser.domain.GraphSearchQuery;
+import no.bekk.cv.graphsearch.parser.domain.Query;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParseTreeUtils;
 import org.parboiled.support.ParsingResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,19 +14,12 @@ import java.util.List;
 
 
 @Component
-public class ParboiledQueryParser implements QueryParser {
-
-    private final GraphSearchRepository repository;
-
-    @Autowired
-    public ParboiledQueryParser(GraphSearchRepository repository) {
-        this.repository = repository;
-    }
+public class GraphParser implements QueryParser {
 
     @Override
     @Transactional
     public String parseQuery(String queryString) {
-        GraphSearchParser parser = Parboiled.createParser(GraphSearchParser.class);
+        GraphGrammar parser = Parboiled.createParser(GraphGrammar.class);
         ReportingParseRunner<GraphSearchQuery> runner = new ReportingParseRunner<>(parser.Expression());
         ParsingResult<GraphSearchQuery> result = runner.run(queryString);
         System.out.println(ParseTreeUtils.printNodeTree(result));

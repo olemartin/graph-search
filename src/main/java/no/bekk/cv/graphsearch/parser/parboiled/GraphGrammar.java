@@ -1,9 +1,10 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.parboiled;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
+import no.bekk.cv.graphsearch.parser.domain.*;
 import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
@@ -14,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @BuildParseTree
-public class GraphSearchParser extends BaseParser<GraphSearchQuery> {
+public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
 
     static List<String> tilgjengeligeFag = new ArrayList<>();

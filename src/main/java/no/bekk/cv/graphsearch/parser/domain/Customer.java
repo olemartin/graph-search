@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.domain;
 
 public class Customer extends Query {
     public Customer(String name) {

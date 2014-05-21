@@ -1,7 +1,7 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.domain;
 
-public class UsedTechology extends Query {
-    public UsedTechology() {
+public class WorkedAt extends Query {
+    public WorkedAt() {
         super("wildcard");
     }
 

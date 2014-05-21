@@ -16,17 +16,17 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:config/applicationContext.xml")
+@Transactional
 public class GraphRepositoryTest {
+
     @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     Neo4jTemplate template;
-
 
     @Autowired
     RepositoryPopulator repo;
 
     @Test
-    @Transactional
     public void lagretPersonSkalKunneHentesFraDatabasen() {
         Person olemartin = template.save(new Person("Ole-Martin Mørk", "Scientist"));
         Person sok = template.findOne(olemartin.getId(), Person.class);
@@ -35,7 +35,6 @@ public class GraphRepositoryTest {
     }
 
     @Test
-    @Transactional
     public void lagretPersonSkalKunneHentesFraDatabasenViaIndex() {
         Person person = new Person("Ole-Martin Mørk", "Scientist");
         person.jobbetI(new Prosjekt("NAV Modernisering"));
@@ -46,9 +45,7 @@ public class GraphRepositoryTest {
     }
 
 
-    @Test
-    @Transactional
     public void testPopuler() {
-     repo.populate();
+        repo.populate();
     }
 }

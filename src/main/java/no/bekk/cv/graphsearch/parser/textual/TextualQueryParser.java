@@ -1,4 +1,9 @@
-package no.bekk.cv.graphsearch.query;
+package no.bekk.cv.graphsearch.parser.textual;
+
+import no.bekk.cv.graphsearch.parser.QueryParser;
+import no.bekk.cv.graphsearch.parser.domain.Direction;
+import no.bekk.cv.graphsearch.parser.domain.Node;
+import no.bekk.cv.graphsearch.parser.domain.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

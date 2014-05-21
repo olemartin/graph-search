@@ -2,7 +2,7 @@ package no.bekk.cv.graphsearch.resource;
 
 
 import no.bekk.cv.graphsearch.integration.RepositoryPopulator;
-import no.bekk.cv.graphsearch.query.QueryParser;
+import no.bekk.cv.graphsearch.parser.QueryParser;
 import no.bekk.cv.graphsearch.service.SearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

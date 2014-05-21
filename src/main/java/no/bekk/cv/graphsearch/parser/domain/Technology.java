@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.domain;
 
 public class Technology extends Query {
     public Technology(String name) {

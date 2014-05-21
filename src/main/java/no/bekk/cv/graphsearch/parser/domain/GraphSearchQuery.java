@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.parser;
+package no.bekk.cv.graphsearch.parser.domain;
 
 import org.parboiled.common.ImmutableList;
 

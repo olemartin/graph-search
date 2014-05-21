@@ -1,6 +1,4 @@
-package no.bekk.cv.graphsearch.parser;
-
-import no.bekk.cv.graphsearch.query.Direction;
+package no.bekk.cv.graphsearch.parser.domain;
 
 public class Relation {
 
@@ -10,14 +8,6 @@ public class Relation {
     public Relation(String value, Direction direction) {
         this.value = value;
         this.direction = direction;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 
     public String print() {
