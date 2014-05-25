@@ -10,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
+import static java.util.stream.StreamSupport.stream;
 
 @Transactional
 @Service
@@ -23,6 +24,6 @@ public class SearchService {
     public List<String> search(String cypher) {
         EndResult<Person> personer = personRepository.query(cypher, new HashMap<>());
 
-        return StreamSupport.stream(personer.spliterator(), false).<String>map(Person::getNavn).collect(Collectors.toList());
+        return stream(personer.spliterator(), false).<String>map(Person::getNavn).collect(Collectors.toList());
     }
 }

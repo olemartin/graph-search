@@ -12,6 +12,7 @@ import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @BuildParseTree
 public class GraphGrammar extends BaseParser<GraphSearchQuery> {
@@ -20,15 +21,9 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     static List<String> tilgjengeligeFag = new ArrayList<>();
     static List<String> tilgjengeligeKunder = new ArrayList<>();
 
-    public static synchronized void init(Iterable<Fag> fags, Iterable<Prosjekt> customers) {
-        if (tilgjengeligeFag.isEmpty()) {
-            for (Fag fag : fags) {
-                tilgjengeligeFag.add(fag.getNavn());
-            }
-            for (Prosjekt customer : customers) {
-                tilgjengeligeKunder.add(customer.getNavn());
-            }
-        }
+    public static void init(List<Fag> fags, List<Prosjekt> customers) {
+        tilgjengeligeFag = fags.stream().map(Fag::getNavn).collect(Collectors.toList());
+        tilgjengeligeKunder = customers.stream().map(Prosjekt::getNavn).collect(Collectors.toList());
     }
 
     public Rule expression() {
