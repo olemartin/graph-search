@@ -41,7 +41,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
                 ),
                 oneOrMore(
                         firstOf(
-                                And(),
+                                and(),
                                 sequence(
                                         know(false),
                                         subjects()
@@ -170,7 +170,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
                 ignoreCase(string);
     }
 
-    Rule And() {
+    Rule and() {
         return ignoreCase("og ");
     }
 }
