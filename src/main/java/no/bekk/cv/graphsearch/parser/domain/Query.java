@@ -55,6 +55,9 @@ public class Query {
             if (name.equals(PROJECTS.getName())) {
                 return new Relation(RelationType.BRUKTE, Direction.BACKWARD);
             }
+            if (name.equals(TECHNOLOGIES.getName())) {
+                return new Relation(RelationType.BRUKTE, Direction.FORWARD);
+            }
         } else if (this instanceof WorkedAt) {
             if (name.equals(CONSULTANTS.getName())) {
                 return new Relation(RelationType.KONSULTERTE, Direction.BACKWARD);
@@ -64,6 +67,6 @@ public class Query {
                 return new Relation(RelationType.KAN, Direction.BACKWARD);
             }
         }
-        throw new IllegalStateException("Unknown relation type " + name);
+        throw new IllegalStateException("Unknown relation type " + name + " of type " + getClass().getSimpleName());
     }
 }

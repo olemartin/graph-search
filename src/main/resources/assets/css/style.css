@@ -23,9 +23,6 @@ h2 {
 }
 
 #searchfield {
-    /*background: transparent;*/
-    /*border: none;*/
-    /*color: transparent;*/
     outline: none;
     border: black thin solid;
     background-color: #EEEEEE;
@@ -67,8 +64,9 @@ li:hover {
 
 #cypher {
     position: absolute;
-    top: 450px;
-    left: 5px;
+    display: none;
+    top: 250px;
+    left: 420px;
     font-size: 34px;
     background-color: #AAAAAA;
     padding:10px;

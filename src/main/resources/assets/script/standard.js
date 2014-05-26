@@ -21,11 +21,11 @@ $(function () {
     }
 
     function adjustFontSize(query) {
-        if (query.length > 70) {
+        if (query.length > 60) {
             searchfield.css("font-size", "20px");
-        } else if (query.length > 50) {
+        } else if (query.length > 45) {
             searchfield.css("font-size", "30px");
-        } else if (query.length > 40) {
+        } else if (query.length > 35) {
             searchfield.css("font-size", "40px");
         } else {
             searchfield.css("font-size", "50px");

@@ -14,9 +14,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static no.bekk.cv.graphsearch.parser.parboiled.Type.*;
+
 @BuildParseTree
 public class GraphGrammar extends BaseParser<GraphSearchQuery> {
-
 
     static List<String> tilgjengeligeFag = new ArrayList<>();
     static List<String> tilgjengeligeKunder = new ArrayList<>();
@@ -30,31 +31,17 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         return sequence(
                 start(),
                 firstOf(
-                        people(),
-                        projects(),
-                        technologies(true)
+                        people(), projects(), technologies(ROOT)
                 ),
                 oneOrMore(
                         firstOf(
                                 and(),
-                                sequence(
-                                        know(false),
-                                        subjects()
-                                ),
-                                sequence(
-                                        workedAt(false),
-                                        customers()
-                                ),
-                                sequence(
-                                        know(false),
-                                        customers()
-                                ),
-                                sequence(
-                                        know(false),
-                                        technologies(false)
-                                ),
-                                know(true),
-                                workedAt(true)
+                                sequence(know(SEARCH), subjects()),
+                                sequence(workedAt(SEARCH), customers()),
+                                sequence(know(SEARCH), customers()),
+                                sequence(know(SEARCH), technologies(MIDDLE)),
+                                know(PARAM),
+                                workedAt(PARAM)
                         )
                 )
         );
@@ -75,9 +62,9 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         return firstOf(subjects.stream().map(this::projectSequence).toArray());
     }
 
-    Rule technologies(boolean root) {
+    Rule technologies(Type type) {
         List<String> subjects = Arrays.asList("teknologier ", "teknologi ", "fag ");
-        if (root) {
+        if (type == ROOT) {
             return firstOf(subjects.stream().map(this::technologySequence).toArray());
         } else {
             return firstOf(subjects.stream().map(this::inTheMiddleSequence).toArray());
@@ -105,9 +92,9 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         return optional("Finn ");
     }
 
-    Rule know(boolean empty) {
-        Rule verbs = firstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukte ", "brukes av ", "brukt av ");
-        if (empty) {
+    Rule know(Type type) {
+        Rule verbs = firstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukte ", "brukes av ", "brukt av ", "har brukt ");
+        if (type == PARAM) {
             return sequence(
                     push(pop().setRetrieveParameters(true).addTarget(new UsedTechology())),
                     optional(that()),
@@ -119,10 +106,9 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         }
     }
 
-    Rule workedAt(boolean empty) {
+    Rule workedAt(Type type) {
         Rule verbs = firstOf("har jobbet på ", "har jobbet hos ", "konsulterte ", "har konsultert ", "har vært hos ");
-        if (empty) {
-
+        if (type == PARAM) {
             return sequence(
                     push(pop().setRetrieveParameters(true).addTarget(new WorkedAt())),
                     optional(that()),
