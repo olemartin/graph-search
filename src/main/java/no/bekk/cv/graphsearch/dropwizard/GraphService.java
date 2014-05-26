@@ -29,7 +29,7 @@ public class GraphService extends Application<GraphConfiguration> {
 
         SearchResource restResource = applicationContext.getBean(SearchResource.class);
         GraphSearchRepository repository = applicationContext.getBean(GraphSearchRepository.class);
-        GraphGrammar.init(repository.hentAlleFag(), repository.hentAlleKunder());
+        GraphGrammar.init(repository.hentAlleFag(), repository.hentAlleKunder(), repository.hentAlleKonsulenter());
         environment.jersey().register(restResource);
         environment.jersey().setUrlPattern("/rest/*");
     }

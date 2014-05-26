@@ -19,4 +19,7 @@ public interface GraphSearchRepository extends GraphRepository<Person> {
 
     @Query("start prosjekt=node:prosjekt(\"*:*\") return distinct prosjekt")
     public List<Prosjekt> hentAlleKunder();
+
+    @Query("start person=node:person(\"*:*\") return distinct person")
+    List<Person> hentAlleKonsulenter();
 }

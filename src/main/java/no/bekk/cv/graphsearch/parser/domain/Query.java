@@ -62,6 +62,10 @@ public class Query {
             if (name.equals(CONSULTANTS.getName())) {
                 return new Relation(RelationType.KONSULTERTE, Direction.BACKWARD);
             }
+        } else if (this instanceof Consultant) {
+            if (name.equals(PROJECTS.getName())) {
+                return new Relation(RelationType.KONSULTERTE, Direction.BACKWARD);
+            }
         } else {
             if (name.equals(CONSULTANTS.getName())) {
                 return new Relation(RelationType.KAN, Direction.BACKWARD);

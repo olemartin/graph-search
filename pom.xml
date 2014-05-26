@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.github.parboiled1</groupId>
             <artifactId>grappa</artifactId>
-            <version>1.0.0-beta.7</version>
+            <version>1.0.0-beta.9</version>
         </dependency>
         <dependency>
             <groupId>io.dropwizard</groupId>

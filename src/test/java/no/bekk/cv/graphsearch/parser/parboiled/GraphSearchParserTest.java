@@ -1,6 +1,7 @@
 package no.bekk.cv.graphsearch.parser.parboiled;
 
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
+import no.bekk.cv.graphsearch.graph.nodes.Person;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,7 +18,8 @@ public class GraphSearchParserTest {
     @BeforeClass
     public static void setup() {
         GraphGrammar.init(Arrays.asList(new Fag("Java"), new Fag("Neo4J")),
-                Arrays.asList(new Prosjekt("Modernisering"), new Prosjekt("Statens vegvesen")));
+                Arrays.asList(new Prosjekt("Modernisering"), new Prosjekt("Statens vegvesen")),
+                Arrays.asList(new Person("Ole-Martin Mørk", "Manager")));
         parser = new GraphParser();
     }
 
@@ -109,6 +111,14 @@ public class GraphSearchParserTest {
         String query = parser.parseQuery("FINN ALLE SOM HAR JOBBET HOS ");
         assertThat(query,
                 is("start wildcard=node(*) \nmatch CONSULTANTS <-[:KONSULTERTE]- wildcard \nreturn distinct CONSULTANTS"));
+        System.out.println(query);
+    }
+
+    @Test
+    public void testFinnProsjekterMedOleMartin() {
+        String query = parser.parseQuery("Finn prosjekter med Ole-Martin Mørk");
+        assertThat(query,
+                is("start person=node:person(navn = \"Ole-Martin Mørk\") \nmatch PROJECTS <-[:KONSULTERTE]- person \nreturn distinct PROJECTS"));
         System.out.println(query);
     }
 }

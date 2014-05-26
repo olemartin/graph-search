@@ -1,6 +1,7 @@
 package no.bekk.cv.graphsearch.parser.parboiled;
 
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
+import no.bekk.cv.graphsearch.graph.nodes.Person;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
 import no.bekk.cv.graphsearch.parser.domain.*;
 import org.parboiled.BaseParser;
@@ -19,12 +20,14 @@ import static no.bekk.cv.graphsearch.parser.parboiled.Type.*;
 @BuildParseTree
 public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
-    static List<String> tilgjengeligeFag = new ArrayList<>();
-    static List<String> tilgjengeligeKunder = new ArrayList<>();
+    static List<String> fag = new ArrayList<>();
+    static List<String> kunder = new ArrayList<>();
+    static List<String> konsulenter = new ArrayList<>();
 
-    public static void init(List<Fag> fags, List<Prosjekt> customers) {
-        tilgjengeligeFag = fags.stream().map(Fag::getNavn).collect(Collectors.toList());
-        tilgjengeligeKunder = customers.stream().map(Prosjekt::getNavn).collect(Collectors.toList());
+    public static void init(List<Fag> fags, List<Prosjekt> customers, List<Person> consultants) {
+        fag = fags.stream().map(Fag::getNavn).collect(Collectors.toList());
+        kunder = customers.stream().map(Prosjekt::getNavn).collect(Collectors.toList());
+        konsulenter = consultants.stream().map(Person::getNavn).collect(Collectors.toList());
     }
 
     public Rule expression() {
@@ -40,11 +43,16 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
                                 sequence(workedAt(SEARCH), customers()),
                                 sequence(know(SEARCH), customers()),
                                 sequence(know(SEARCH), technologies(MIDDLE)),
+                                sequence(workedWith(), consultants()),
                                 know(PARAM),
                                 workedAt(PARAM)
                         )
                 )
         );
+    }
+
+    Rule workedWith() {
+        return string("med ");
     }
 
     @SuppressNode
@@ -121,24 +129,35 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     }
 
     Rule subjects() {
-        Rule[] rules = new Rule[tilgjengeligeFag.size()];
-        for (int i = 0; i < tilgjengeligeFag.size(); i++) {
+        Rule[] rules = new Rule[fag.size()];
+        for (int i = 0; i < fag.size(); i++) {
             rules[i] = sequence(
-                    push(pop().addTarget(new Technology(tilgjengeligeFag.get(i)))),
-                    tilgjengeligeFag.get(i) + " ");
+                    push(pop().addTarget(new Technology(fag.get(i)))),
+                    fag.get(i) + " ");
         }
         return firstOf(rules);
     }
 
     Rule customers() {
-        Rule[] rules = new Rule[tilgjengeligeKunder.size()];
-        for (int i = 0; i < tilgjengeligeKunder.size(); i++) {
+        Rule[] rules = new Rule[kunder.size()];
+        for (int i = 0; i < kunder.size(); i++) {
             rules[i] = sequence(
-                    push(pop().addTarget(new Customer(tilgjengeligeKunder.get(i)))),
-                    tilgjengeligeKunder.get(i) + " ");
+                    push(pop().addTarget(new Customer(kunder.get(i)))),
+                    kunder.get(i) + " ");
         }
         return firstOf(rules);
     }
+
+    Rule consultants() {
+        Rule[] rules = new Rule[konsulenter.size()];
+        for (int i = 0; i < konsulenter.size(); i++) {
+            rules[i] = sequence(
+                    push(pop().addTarget(new Consultant(konsulenter.get(i)))),
+                    konsulenter.get(i) + " ");
+        }
+        return firstOf(rules);
+    }
+
 
     Rule whiteSpace() {
         return zeroOrMore(anyOf(" \t\f"));
