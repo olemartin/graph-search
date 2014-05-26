@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.parser.domain;
+package no.bekk.cv.graphsearch.parser.domain.query;
 
 public class WorkedAt extends Query {
     public WorkedAt() {

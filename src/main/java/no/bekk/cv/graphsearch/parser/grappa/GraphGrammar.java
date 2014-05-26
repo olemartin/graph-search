@@ -1,9 +1,10 @@
-package no.bekk.cv.graphsearch.parser.parboiled;
+package no.bekk.cv.graphsearch.parser.grappa;
 
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Person;
 import no.bekk.cv.graphsearch.graph.nodes.Prosjekt;
 import no.bekk.cv.graphsearch.parser.domain.*;
+import no.bekk.cv.graphsearch.parser.domain.query.*;
 import org.parboiled.BaseParser;
 import org.parboiled.Rule;
 import org.parboiled.annotations.BuildParseTree;
@@ -15,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static no.bekk.cv.graphsearch.parser.parboiled.Type.*;
+import static no.bekk.cv.graphsearch.parser.grappa.Type.*;
 
 @BuildParseTree
 public class GraphGrammar extends BaseParser<GraphSearchQuery> {
@@ -51,27 +52,27 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         );
     }
 
-    Rule workedWith() {
-        return string("med ");
+    Object workedWith() {
+        return "med";
     }
 
     @SuppressNode
     Rule that() {
-        return optional("som ");
+        return optional("som");
     }
 
     Rule people() {
-        List<String> subjects = Arrays.asList("alle konsulenter ", "alle ", "konsulenter ");
+        List<String> subjects = Arrays.asList("alle konsulenter", "alle", "konsulenter");
         return firstOf(subjects.stream().map(this::peopleSequence).toArray());
     }
 
     Rule projects() {
-        List<String> subjects = Arrays.asList("prosjekter ", "engasjement ");
+        List<String> subjects = Arrays.asList("prosjekter", "engasjement");
         return firstOf(subjects.stream().map(this::projectSequence).toArray());
     }
 
     Rule technologies(Type type) {
-        List<String> subjects = Arrays.asList("teknologier ", "teknologi ", "fag ");
+        List<String> subjects = Arrays.asList("teknologier", "teknologi", "fag");
         if (type == ROOT) {
             return firstOf(subjects.stream().map(this::technologySequence).toArray());
         } else {
@@ -97,14 +98,14 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
     @SuppressNode
     Rule start() {
-        return optional("Finn ");
+        return optional("Finn");
     }
 
     Rule know(Type type) {
-        Rule verbs = firstOf("kan ", "kjenner ", "programmerer ", "bruker ", "brukte ", "brukes av ", "brukt av ", "har brukt ");
+        Rule verbs = firstOf("kan", "kjenner", "programmerer", "bruker", "brukte", "brukes av", "brukt av", "har brukt");
         if (type == PARAM) {
             return sequence(
-                    push(pop().setRetrieveParameters(true).addTarget(new UsedTechology())),
+                    push(pop().setRetrieveParameters(true).addTarget(new UsedTechnology())),
                     optional(that()),
                     verbs);
         } else {
@@ -115,7 +116,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     }
 
     Rule workedAt(Type type) {
-        Rule verbs = firstOf("har jobbet på ", "har jobbet hos ", "konsulterte ", "har konsultert ", "har vært hos ");
+        Rule verbs = firstOf("har jobbet på", "har jobbet hos", "konsulterte", "har konsultert", "har vært hos");
         if (type == PARAM) {
             return sequence(
                     push(pop().setRetrieveParameters(true).addTarget(new WorkedAt())),
@@ -133,7 +134,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         for (int i = 0; i < fag.size(); i++) {
             rules[i] = sequence(
                     push(pop().addTarget(new Technology(fag.get(i)))),
-                    fag.get(i) + " ");
+                    fag.get(i));
         }
         return firstOf(rules);
     }
@@ -143,7 +144,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         for (int i = 0; i < kunder.size(); i++) {
             rules[i] = sequence(
                     push(pop().addTarget(new Customer(kunder.get(i)))),
-                    kunder.get(i) + " ");
+                    kunder.get(i));
         }
         return firstOf(rules);
     }
@@ -153,7 +154,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         for (int i = 0; i < konsulenter.size(); i++) {
             rules[i] = sequence(
                     push(pop().addTarget(new Consultant(konsulenter.get(i)))),
-                    konsulenter.get(i) + " ");
+                    konsulenter.get(i));
         }
         return firstOf(rules);
     }
@@ -165,12 +166,10 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
 
     @Override
     protected Rule fromStringLiteral(@Nonnull String string) {
-        return string.endsWith(" ") ?
-                sequence(ignoreCase(string.substring(0, string.length() - 1)), whiteSpace()) :
-                ignoreCase(string);
+        return sequence(ignoreCase(string), whiteSpace());
     }
 
-    Rule and() {
-        return ignoreCase("og ");
+    Object and() {
+        return "og";
     }
 }

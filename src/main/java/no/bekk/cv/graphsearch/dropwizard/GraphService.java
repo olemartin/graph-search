@@ -6,7 +6,7 @@ import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
-import no.bekk.cv.graphsearch.parser.parboiled.GraphGrammar;
+import no.bekk.cv.graphsearch.parser.grappa.GraphGrammar;
 import no.bekk.cv.graphsearch.resource.SearchResource;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

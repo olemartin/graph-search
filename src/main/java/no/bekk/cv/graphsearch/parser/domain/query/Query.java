@@ -1,4 +1,8 @@
-package no.bekk.cv.graphsearch.parser.domain;
+package no.bekk.cv.graphsearch.parser.domain.query;
+
+import no.bekk.cv.graphsearch.parser.domain.Direction;
+import no.bekk.cv.graphsearch.parser.domain.Relation;
+import no.bekk.cv.graphsearch.parser.domain.RelationType;
 
 public class Query {
     public static Query CONSULTANTS = new Query("CONSULTANTS");
@@ -48,7 +52,7 @@ public class Query {
             if (name.equals(TECHNOLOGIES.getName())) {
                 return new Relation(RelationType.BRUKTE, Direction.BACKWARD);
             }
-        } else if (this instanceof UsedTechology) {
+        } else if (this instanceof UsedTechnology) {
             if (name.equals(CONSULTANTS.getName())) {
                 return new Relation(RelationType.KAN, Direction.BACKWARD);
             }
@@ -69,6 +73,9 @@ public class Query {
         } else {
             if (name.equals(CONSULTANTS.getName())) {
                 return new Relation(RelationType.KAN, Direction.BACKWARD);
+            }
+            if (name.equals(PROJECTS.getName())) {
+                return new Relation(RelationType.BRUKTE, Direction.BACKWARD);
             }
         }
         throw new IllegalStateException("Unknown relation type " + name + " of type " + getClass().getSimpleName());

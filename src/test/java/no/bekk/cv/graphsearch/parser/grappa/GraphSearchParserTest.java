@@ -1,4 +1,4 @@
-package no.bekk.cv.graphsearch.parser.parboiled;
+package no.bekk.cv.graphsearch.parser.grappa;
 
 import no.bekk.cv.graphsearch.graph.nodes.Fag;
 import no.bekk.cv.graphsearch.graph.nodes.Person;

@@ -1,6 +1,7 @@
 package no.bekk.cv.graphsearch.parser.domain;
 
 import com.google.common.collect.ImmutableList;
+import no.bekk.cv.graphsearch.parser.domain.query.Query;
 
 import java.util.List;
 

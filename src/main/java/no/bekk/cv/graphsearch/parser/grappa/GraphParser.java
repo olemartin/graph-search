@@ -1,8 +1,8 @@
-package no.bekk.cv.graphsearch.parser.parboiled;
+package no.bekk.cv.graphsearch.parser.grappa;
 
 import no.bekk.cv.graphsearch.parser.QueryParser;
 import no.bekk.cv.graphsearch.parser.domain.GraphSearchQuery;
-import no.bekk.cv.graphsearch.parser.domain.Query;
+import no.bekk.cv.graphsearch.parser.domain.query.Query;
 import org.parboiled.Parboiled;
 import org.parboiled.parserunners.ReportingParseRunner;
 import org.parboiled.support.ParseTreeUtils;
