@@ -66,7 +66,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
         return firstOf(subjects.stream().map(this::peopleSequence).toArray());
     }
 
-    Rule projects() {
+    Rule  projects() {
         List<String> subjects = Arrays.asList("prosjekter", "engasjement");
         return firstOf(subjects.stream().map(this::projectSequence).toArray());
     }
@@ -116,7 +116,7 @@ public class GraphGrammar extends BaseParser<GraphSearchQuery> {
     }
 
     Rule workedAt(Type type) {
-        Rule verbs = firstOf("har jobbet på", "har jobbet hos", "konsulterte", "har konsultert", "har vært hos");
+        Rule verbs = firstOf("har jobbet på", "har jobbet hos", "konsulterte", "har konsultert", "har vært hos", "jobber hos");
         if (type == PARAM) {
             return sequence(
                     push(pop().setRetrieveParameters(true).addTarget(new WorkedAt())),

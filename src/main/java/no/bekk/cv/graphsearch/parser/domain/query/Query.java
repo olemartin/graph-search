@@ -69,6 +69,8 @@ public class Query {
         } else if (this instanceof Consultant) {
             if (name.equals(PROJECTS.getName())) {
                 return new Relation(RelationType.KONSULTERTE, Direction.BACKWARD);
+            } else if (name.equals(TECHNOLOGIES.getName())) {
+                return new Relation(RelationType.KAN, Direction.BACKWARD);
             }
         } else {
             if (name.equals(CONSULTANTS.getName())) {
