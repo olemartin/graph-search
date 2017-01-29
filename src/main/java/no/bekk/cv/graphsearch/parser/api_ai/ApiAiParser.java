@@ -9,10 +9,7 @@ import ai.api.model.Result;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import no.bekk.cv.graphsearch.parser.QueryParser;
-import no.bekk.cv.graphsearch.parser.domain.query.Consultant;
-import no.bekk.cv.graphsearch.parser.domain.query.Customer;
-import no.bekk.cv.graphsearch.parser.domain.query.Query;
-import no.bekk.cv.graphsearch.parser.domain.query.Technology;
+import no.bekk.cv.graphsearch.parser.domain.query.*;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -33,6 +30,7 @@ public class ApiAiParser implements QueryParser {
     private static final String TECHNOLOGY_ENTITY_NAME = "Technology";
     private static final String PERSON_ENTITY_NAME = "Person";
     private static final String PROJECT_ENTITY_NAME = "Project";
+    private static final String MIDDLETARGETS_ENTITY_NAME = "MiddleTarget";
 
     private final static String PEOPLE_INTENT_ID = "155c0acb-82c4-4b13-9010-8a46b47c946d";
     private final static String PROJECTS_INTENT_ID = "531dbca2-84dd-4f6a-b694-712fc50cad2a";
@@ -45,16 +43,20 @@ public class ApiAiParser implements QueryParser {
             if (!response.isError()) {
                 Result result = response.getResult();
                 List<Query> targets = new ArrayList<>();
+                Query middleTarget = null;
                 getEntities(result, TECHNOLOGY_ENTITY_NAME).stream().map(Technology::new).forEach(targets::add);
                 getEntities(result, PERSON_ENTITY_NAME).stream().map(Consultant::new).forEach(targets::add);
                 getEntities(result, PROJECT_ENTITY_NAME).stream().map(Customer::new).forEach(targets::add);
+                if (!getEntities(result, MIDDLETARGETS_ENTITY_NAME).isEmpty()) {
+                    middleTarget = Query.TECHNOLOGIES;
+                }
 
                 String searchFor = getIntent(result.getMetadata().getIntentId()).getName();
 
                 StringBuilder start = new StringBuilder();
                 StringBuilder match = new StringBuilder();
 
-                createQuery(start, match, targets, null, searchFor);
+                createQuery(start, match, targets, middleTarget, searchFor);
                 String retur = "return distinct " + searchFor;
                 return start.append(match).append(retur).toString();
             } else {

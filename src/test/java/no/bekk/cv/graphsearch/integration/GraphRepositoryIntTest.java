@@ -16,7 +16,7 @@ import java.util.HashMap;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:config/applicationContext.xml")
 @Transactional
-public class PersonRepositoryIntTest {
+public class GraphRepositoryIntTest {
 
     @Autowired
     GraphSearchRepository searchRepository;
