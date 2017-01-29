@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Prosjekt {
+public class Prosjekt implements SearchEntity{
     @GraphId
     Long id;
     @Indexed(indexName = "prosjekt", indexType = IndexType.FULLTEXT)

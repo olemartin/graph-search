@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Person {
+public class Person implements SearchEntity {
 
     @GraphId
     Long id;

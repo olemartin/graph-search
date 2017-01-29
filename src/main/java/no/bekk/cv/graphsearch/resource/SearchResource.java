@@ -36,9 +36,9 @@ public class SearchResource {
             String cypher = parser.parseQuery(query);
             System.out.println(query);
             System.out.println(cypher);
-            List<String> personer = searchService.search(cypher);
+            List<String> elements = searchService.search(cypher);
 
-            return new SearchResult(personer, cypher);
+            return new SearchResult(elements, cypher);
         } catch (IllegalArgumentException e) {
             return new SearchResult(new ArrayList<String>(), "");
         }

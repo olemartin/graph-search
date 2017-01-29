@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @NodeEntity
-public class Firma {
+public class Firma implements SearchEntity {
 
     @GraphId
     Long id;
@@ -38,5 +38,10 @@ public class Firma {
             this.prosjekter.add(prosjekt);
             prosjekt.setFirma(this);
         }
+    }
+
+    @Override
+    public String getNavn() {
+        return navn;
     }
 }

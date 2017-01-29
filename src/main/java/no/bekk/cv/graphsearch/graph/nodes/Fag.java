@@ -6,7 +6,7 @@ import org.springframework.data.neo4j.annotation.NodeEntity;
 import org.springframework.data.neo4j.support.index.IndexType;
 
 @NodeEntity
-public class Fag {
+public class Fag implements SearchEntity {
 
     @GraphId
     Long id;

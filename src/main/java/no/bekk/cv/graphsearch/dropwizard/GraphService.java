@@ -8,6 +8,7 @@ import io.dropwizard.setup.Environment;
 import no.bekk.cv.graphsearch.integration.GraphSearchRepository;
 import no.bekk.cv.graphsearch.parser.grappa.GraphGrammar;
 import no.bekk.cv.graphsearch.resource.SearchResource;
+import org.neo4j.graphdb.GraphDatabaseService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class GraphService extends Application<GraphConfiguration> {
@@ -32,9 +33,21 @@ public class GraphService extends Application<GraphConfiguration> {
         GraphGrammar.init(repository.hentAlleFag(), repository.hentAlleKunder(), repository.hentAlleKonsulenter());
         environment.jersey().register(restResource);
         environment.jersey().setUrlPattern("/rest/*");
+        addShutDownHook(applicationContext.getBean(GraphDatabaseService.class));
+    }
+
+    private void addShutDownHook(final GraphDatabaseService service) {
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+            @Override
+            public void run() {
+                System.out.println("Shutting down");
+                service.shutdown();
+            }
+        });
     }
 
     public static void main(String[] args) throws Exception {
+
         new GraphService().run(new String[]{"server", "graph-search.yml"});
     }
 }

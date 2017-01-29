@@ -1,7 +1,7 @@
 package no.bekk.cv.graphsearch.integration;
 
 
-import no.bekk.cv.graphsearch.graph.nodes.Person;
+import no.bekk.cv.graphsearch.graph.nodes.SearchEntity;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class PersonRepositoryIntTest {
 
     @Autowired
-    GraphSearchRepository personRepository;
+    GraphSearchRepository searchRepository;
 
     @Autowired
     RepositoryPopulator repo;
@@ -37,9 +37,9 @@ public class PersonRepositoryIntTest {
                 "with count(fag) as knownTech, person, prosjekt1 " +
                 "where length(()<-[:BRUKTE]-prosjekt1)=knownTech " +
                 "return person";
-        EndResult<Person> personer = personRepository.query(q, new HashMap<String, Object>());
-        for (Person person : personer) {
-            System.out.println(person.getNavn());
+        EndResult<SearchEntity> elements = searchRepository.query(q, new HashMap<>());
+        for (SearchEntity element : elements) {
+            System.out.println(element.getNavn());
         }
 
     }
